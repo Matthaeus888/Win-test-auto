@@ -1,0 +1,33 @@
+# 환경변수 / 민감정보 (CLAUDE.md 17절 Security/Secret 관리 원칙)
+.env
+.env.local
+
+# Google 서비스 계정 키 등 인증정보 파일
+service-account*.json
+*-credentials.json
+credentials.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 자동화 테스트 산출물 (AUTOMATION_GUIDE.md 12/14절)
+automation/screenshots/*
+!automation/screenshots/.gitkeep
+automation/reports/*
+!automation/reports/.gitkeep
+automation/.env
+
+# shrimp-task-manager MCP DATA_DIR (자체 .git을 가진 별도 저장소이며 이 프로젝트 소스가 아님)
+shrimp_data/
+
+# Playwright MCP 실행 캐시(Locator 조사용 도구 산출물, 소스 아님 - AUTOMATION_GUIDE.md 5절)
+.playwright-mcp/
+
+# 2-setup-mcp.ps1이 .mcp.json을 다시 쓸 때 남기는 백업본
+.mcp.json.bak
+
+# Claude 데스크톱 앱이 남기는 임시 출력 폴더 (프로젝트 소스 아님)
+Claude outputs/

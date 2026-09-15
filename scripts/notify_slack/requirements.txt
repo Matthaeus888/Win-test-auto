@@ -1,0 +1,2 @@
+# notify.py는 표준 라이브러리(xml.etree.ElementTree, urllib.request)만 사용하므로
+# 별도의 3rd-party 의존성이 없습니다.
