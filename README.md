@@ -1,88 +1,153 @@
+<div align="center">
 
+# QA Automation Portfolio
 
-Claude Code를 활용해 요구사항 정의부터 CI 결과 알림까지 QA 프로세스 전체를, 중요한
-의사결정 지점(자동화 대상 선정, Commit, Push)에서는 사람의 승인을 유지한 채 자동화하는
-프로젝트입니다.
+**요구사항 정의부터 CI 결과 알림까지 — QA 프로세스 전체를 설계하고, AI 에이전트를
+승인 게이트로 통제하며 자동화한 프로젝트**
 
-대상 서비스는 이커머스 연습 사이트 [automationexercise.com](https://automationexercise.com/)이며,
-Selenium + pytest + Page Object Model 기반으로 자동화 테스트를 구현합니다.
+[![CI](https://github.com/Matthaeus888/Win-test-auto/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/Win-test-auto/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue)
+![Selenium](https://img.shields.io/badge/selenium-4.x-43B02A)
+![pytest](https://img.shields.io/badge/pytest-passing-0A9EDC)
+![Tests](https://img.shields.io/badge/automated_TCs-76-informational)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
-## 프로젝트 목표
+[English README](./README.en.md) · [결함 리포트](./docs/defects/README.md) · [트러블슈팅](./docs/troubleshooting/) · [AI 에이전트 설계](./docs/AI_AGENTS.md)
 
-- 반복적인 QA 작업(TC 작성, 자동화 코드 구현, 테스트 실행, 리포팅)의 자동화
-- 요구사항 → 산출물 → 코드 → 실행 결과 간의 추적성 확보
-- 자동화 대상 선정, Commit, Push 등 중요한 의사결정 지점에서 사용자 통제권 유지
+</div>
 
-## QA 자동화 워크플로우
+---
 
-```
-1. 요구사항 기반 PRD 작성
-2. PRD 기반 전체 기능 Test Case 생성
-3. 사용자가 TC를 검토하고 자동화 대상 선정        (사용자 승인)
-4. 선정된 자동화 TC 기반 개발 Roadmap 작성
-5. Roadmap 기반 테스트 자동화 코드 구현
-6. 자동화 테스트 실행 및 결과 검증
-7. 코드 리뷰
-8. Git Commit                                   (사용자 승인)
-9. Git Push                                     (사용자 승인)
-10. GitHub Actions 기반 CI 실행
-11. CI 결과를 Slack으로 알림
-```
+## 📌 3줄 요약
 
-각 단계의 상세 원칙은 [`CLAUDE.md`](./CLAUDE.md)에 정의되어 있습니다.
+- 이커머스 연습 사이트([automationexercise.com](https://automationexercise.com/))를 대상으로, **PRD 작성 → TC 설계 → 자동화 대상 선정 → Roadmap → 코드 구현 → CI/CD → Slack 알림**까지 QA 프로세스 전체를 설계·구현했습니다.
+- 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 **76건의 Test Case를 자동화**(Selenium + pytest + Page Object Model)했습니다.
+- 테스트 자동화 과정에서 **실제 프로덕션 결함 2건을 발견**하고 재현 절차·근본 원인까지 분석해 정식 리포트로 남겼습니다. → [결함 리포트 보기](./docs/defects/README.md)
 
-## 디렉터리 구조
+## 🎬 실행 결과 예시
 
-```
-qa-process/
-├── docs/
-│   ├── prd/                        # Project/Feature PRD
-│   │   └── feature/
-│   ├── tc/                         # Test Case, Feature별 자동화 대상 선정 결과
-│   │   └── automation-candidates/
-│   ├── roadmap/ROADMAP.md          # 자동화 개발 Roadmap 및 진행 현황
-│   └── automation/AUTOMATION_GUIDE.md  # 자동화 코드 개발 기준 (Source of Truth)
-├── automation/                     # 자동화 테스트 코드
-│   ├── pages/                      # Page Object (화면별 1클래스, BasePage 상속)
-│   ├── tests/                      # pytest 테스트 (Assertion 전담)
-│   ├── config/                     # Base URL, 계정 등 환경 설정
-│   ├── utils/                      # 화면과 무관한 공통 로직
-│   ├── test_data/                  # 정적 테스트 데이터
-│   ├── conftest.py                 # WebDriver fixture, 실패 시 스크린샷 hook
-│   ├── screenshots/, reports/      # 실행 산출물 (git 미추적)
-│   └── requirements.txt, pytest.ini
-├── scripts/
-│   ├── notify_slack/               # CI 실패 시 Slack Webhook 알림 스크립트
-│   ├── setup/                      # Windows 로컬 환경 세팅 스크립트 (환경/MCP/Git/검증)
-│   └── sheets_sync/                # TC 작성 Agent용 Google Sheets 연동 모듈
-├── .github/workflows/ci.yml        # GitHub Actions CI 워크플로우
-├── .claude/agents/, .claude/skills/  # Sub Agent / Skill 정의
-└── CLAUDE.md                       # 프로젝트 최상위 지침
+실제 로그인/로그아웃 기능(TC-LOGIN-LOGOUT) 자동화 스위트를 실행한 결과입니다(스크린샷이 아닌 실제 실행 로그 발췌).
+
+```text
+$ pytest tests/test_login.py -v
+tests/test_login.py::test_login_page_shows_login_and_signup_sections PASSED
+tests/test_login.py::test_navigate_to_login_via_top_navigation PASSED
+tests/test_login.py::test_navigate_to_login_via_direct_url PASSED
+tests/test_login.py::test_login_with_valid_credentials_lands_on_home PASSED
+tests/test_login.py::test_login_with_nonexistent_email_shows_error PASSED
+tests/test_login.py::test_login_with_wrong_password_shows_same_error PASSED
+tests/test_login.py::test_login_redirects_to_home_when_reentering_login_page PASSED
+tests/test_login.py::test_login_state_persists_after_refresh PASSED
+tests/test_login.py::test_login_with_long_special_char_input_shows_error PASSED
+tests/test_login.py::test_logout_via_top_navigation FAILED
+tests/test_login.py::test_logout_via_direct_url PASSED
+
+================== 1 failed, 10 passed in 100.17s (0:01:40) ==================
 ```
 
-## 로컬 환경 세팅 (Windows)
+10건은 정상 통과했고, 실패한 1건은 자동화 코드 결함이 아니라 **실제 대상 사이트의
+세션 처리 결함**으로 판정해 정식 리포트로 남겼습니다 → [DEF-001 상세 보기](./docs/defects/DEF-001-logout-session-not-terminated.md)
 
-저장소를 처음 받은 PC에서는 아래 스크립트로 실행 환경 · AI Agent(MCP) · Git · CI 연결을
-순서대로 준비합니다. 자세한 절차는 [`docs/setup/WINDOWS_SETUP.md`](./docs/setup/WINDOWS_SETUP.md)를
-참고하세요.
+## 🎯 이 프로젝트로 증명하는 역량
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\setup\1-setup-env.ps1    # Python/.venv/의존성/.env
-powershell -ExecutionPolicy Bypass -File scripts\setup\2-setup-mcp.ps1    # playwright / shrimp MCP 연결
-powershell -ExecutionPolicy Bypass -File scripts\setup\3-setup-git.ps1    # git init + GitHub 원격 연결
-powershell -ExecutionPolicy Bypass -File scripts\setup\4-verify.ps1       # 테스트 실행으로 동작 확인
+| 영역 | 무엇을 했는가 | 근거 |
+|---|---|---|
+| **요구사항 분석 · PRD 작성** | 실제 사이트 동작을 확인하며 Project/Feature PRD 7건 작성, 실측과 다른 부분은 발견 즉시 재승인 절차로 수정 | [docs/prd/](./docs/prd/) |
+| **Test Case 설계** | Priority(P0~P2)를 Impact×Likelihood Risk Score로 정량 산정, 결함 의심 항목은 별도 섹션으로 분리 | [docs/tc/](./docs/tc/) |
+| **자동화 대상 선정** | Business Criticality·회귀 빈도·자동화 안정성 등 6축 정량 평가(Automation Score)로 자동화 여부 판단 | [docs/tc/automation-candidates/](./docs/tc/automation-candidates/) |
+| **테스트 자동화 구현** | Selenium + pytest + Page Object Model, 공통 Wait/재시도 로직을 `BasePage`로 추상화 | [automation/](./automation/) |
+| **결함 발견·분석 능력** | 실제 프로덕션 결함 2건을 재현 절차·근본 원인·판정 근거까지 갖춘 정식 리포트로 기록 | [docs/defects/](./docs/defects/) |
+| **CI/CD 파이프라인 구축** | GitHub Actions로 push/스케줄/수동 실행 3가지 트리거, headless Chrome, Artifact 업로드 | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |
+| **문제 해결 능력** | 제3자 광고 오버레이 간섭, headless 환경 결함, CI 조건식 논리 오류 등 실전 이슈 해결 | [docs/troubleshooting/](./docs/troubleshooting/) |
+
+## 🔄 QA 프로세스
+
+```mermaid
+flowchart LR
+    A[요구사항] --> B[PRD 작성]
+    B -->|"승인 ✅"| C[Test Case 작성]
+    C -->|"자동화 대상 선정 승인 ✅"| D[개발 Roadmap 작성]
+    D --> E[자동화 코드 구현]
+    E --> F[테스트 실행 · 결과 검증]
+    F --> G[코드 리뷰]
+    G -->|"Commit 승인 ✅"| H[Git Commit]
+    H -->|"Push 승인 ✅"| I[Git Push]
+    I --> J[GitHub Actions CI]
+    J --> K[Slack 결과 알림]
+
+    style B fill:#e8f0fe
+    style C fill:#e8f0fe
+    style D fill:#e8f0fe
+    style H fill:#fde8e8
+    style I fill:#fde8e8
 ```
 
-commit과 push는 스크립트가 임의로 수행하지 않고 실행 중 사용자 확인을 받습니다(`CLAUDE.md` 14·18절).
+✅ 표시는 **사람의 명시적 승인이 있어야만** 다음 단계로 진행되는 지점입니다. 이 게이트를
+Sub Agent 5종의 역할 분리와 함께 어떻게 설계했는지는 [AI 에이전트 설계 문서](./docs/AI_AGENTS.md)에서 자세히 다룹니다.
 
-## 자동화 테스트 실행 (로컬)
+## 🏗️ 자동화 아키텍처 (Page Object Model)
+
+```mermaid
+flowchart TD
+    T["Test Layer (pytest)<br/>Assertion 전담"] --> P["Page Object Layer<br/>LoginPage · CartPage · CheckoutPage ..."]
+    P --> BP["BasePage<br/>공통 click/type/wait<br/>광고 오버레이 방어 · 클릭 재시도"]
+    BP --> WD[Selenium WebDriver]
+    WD --> BR[(Chrome Browser)]
+    T -.실패 시.-> SS[스크린샷 자동 저장]
+    T --> RP["리포트<br/>pytest-html + JUnit XML"]
+```
+
+- **Page Layer는 조작/조회만, Assertion은 Test Layer가 전담** — 화면 변경 시 Page
+  클래스만 수정하면 되도록 관심사를 분리했습니다.
+- 모든 Page Object가 `BasePage`를 상속해, 광고 오버레이 방어·클릭 재시도 로직을
+  한 곳에서만 구현하고 전체에 일관 적용합니다(상세: [트러블슈팅 문서](./docs/troubleshooting/ad-overlay.md)).
+
+## 🐛 발견한 결함
+
+| ID | 제목 | 심각도 |
+|---|---|---|
+| [DEF-001](./docs/defects/DEF-001-logout-session-not-terminated.md) | `/logout` 접근 시 서버 세션이 종료되지 않고 로그인 상태로 Home에 랜딩 | High |
+| [DEF-002](./docs/defects/DEF-002-logout-server-error-disclosure.md) | 로그아웃 상태에서 `/logout` 접근 시 Django 디버그 에러 페이지 노출(정보 노출) | Medium |
+
+각 리포트에는 재현 절차, 기대/실제 결과, 스크린샷 증거, 근본 원인 추정, 그리고
+**"자동화 코드 문제가 아님을 어떻게 배제했는가"** 판정 근거가 포함되어 있습니다.
+
+## 🔧 트러블슈팅 사례
+
+| 문서 | 내용 |
+|---|---|
+| [ad-overlay.md](./docs/troubleshooting/ad-overlay.md) | 제3자 광고 오버레이의 클릭 가로채임 대응 — 잘못된 최적화가 오히려 회귀를 유발했던 경험 포함 |
+| [flaky-tests.md](./docs/troubleshooting/flaky-tests.md) | headless 전용 결함, CI 조건식 논리 오류, "알려진 결함"과 "새로운 결함" 구분 원칙 |
+
+## 🤖 AI 에이전트 기반 개발
+
+이 프로젝트는 Claude Code 기반 **Sub Agent 5종**(PRD 작성 → TC 작성 → 자동화 대상
+선정 → Roadmap 작성 → 자동화 구현)으로 역할을 분리하고, Commit·Push·자동화 대상
+확정 등 주요 의사결정 지점마다 **사람의 명시적 승인**을 강제하는 구조로 설계했습니다.
+AI가 무엇을 자율적으로 하고 무엇은 반드시 사람이 결정하도록 설계했는지, 실제로
+산출물 간 충돌이 발생했을 때 어떻게 처리했는지는 [`docs/AI_AGENTS.md`](./docs/AI_AGENTS.md)에서 확인할 수 있습니다.
+
+## 📊 테스트 현황
+
+| Feature | 승인된 TC 수 | 자동화 여부 |
+|---|---|---|
+| 로그인/로그아웃 | 11 | ✅ 전건 자동화 |
+| 회원가입/계정삭제 | 11 | ✅ 전건 자동화 |
+| 상단 네비게이션 | 6 | ✅ 전건 자동화 |
+| 상품 검색 | 8 | ✅ 전건 자동화 |
+| 장바구니 | 13 | ✅ 전건 자동화 |
+| 상품 상세 | 6 | ✅ 전건 자동화 |
+| 페이지별 UI | 21 | ✅ 전건 자동화 |
+| **합계** | **76** | **79개 pytest 케이스**(일부 TC는 파라미터화로 확장 실행) |
+
+## 🚀 실행 방법
 
 ```bash
 cd automation
 pip install -r requirements.txt
 cp .env.example .env   # ACTEST1~3_PASSWORD 값을 채운 뒤 사용 (git에 커밋하지 않음)
 
-pytest tests/                                        # 전체 실행
+pytest tests/                                         # 전체 실행
 pytest tests/test_login.py                            # 파일 단위 실행
 pytest tests/test_cart.py::test_add_to_cart_shows_modal  # 단일 테스트 실행
 ```
@@ -90,42 +155,62 @@ pytest tests/test_cart.py::test_add_to_cart_shows_modal  # 단일 테스트 실�
 리포트는 `automation/reports/`(HTML + JUnit XML), 실패 시 스크린샷은
 `automation/screenshots/`에 저장됩니다(둘 다 git 미추적).
 
-## CI/CD
+### CI/CD
 
-`.github/workflows/ci.yml`(GitHub Actions)이 아래 조건에서 `automation/tests/` 전체를
-headless Chrome으로 실행합니다.
+[`.github/workflows/ci.yml`](./.github/workflows/ci.yml)이 아래 조건에서 전체 테스트를
+headless Chrome으로 실행하고, 실패 시에만 Slack으로 알립니다.
 
 - `master` 브랜치 push 시
 - 매일 한국시간(KST) 오전 9시 스케줄 실행
 - GitHub Actions 탭에서 수동 실행(workflow_dispatch)
 
-실행 결과(HTML 리포트 + JUnit XML + 실패 스크린샷)는 Artifact로 업로드되며, 테스트 실패
-시에만 `scripts/notify_slack/notify.py`가 실패한 테스트의 파일:라인과 에러 메시지를 요약해
-Slack Webhook으로 알립니다.
+## 📁 프로젝트 구조
+
+```
+qa-automation-portfolio/
+├── docs/
+│   ├── prd/                        # Project/Feature PRD
+│   ├── tc/                         # Test Case + 자동화 대상 선정 결과
+│   ├── roadmap/ROADMAP.md          # 자동화 개발 Roadmap 및 진행 현황
+│   ├── automation/AUTOMATION_GUIDE.md  # 자동화 코드 개발 기준
+│   ├── defects/                    # 🐛 발견한 결함 정식 리포트
+│   ├── troubleshooting/            # 🔧 실전 문제 해결 사례
+│   └── AI_AGENTS.md                # 🤖 AI 에이전트 역할 분리·승인 게이트 설계
+├── automation/                     # Selenium + pytest 자동화 코드 (POM)
+│   ├── pages/                      # Page Object (화면별 1클래스, BasePage 상속)
+│   ├── tests/                      # pytest 테스트 (Assertion 전담)
+│   ├── config/, utils/, test_data/
+│   └── conftest.py, requirements.txt, pytest.ini
+├── scripts/
+│   ├── notify_slack/               # CI 실패 시 Slack Webhook 알림
+│   └── sheets_sync/                # TC ↔ Google Sheets 연동
+├── .github/workflows/ci.yml        # GitHub Actions CI
+├── .claude/agents/, .claude/skills/ # Sub Agent / Skill 정의
+└── CLAUDE.md                       # 프로젝트 최상위 지침 (Source of Truth)
+```
+
+## 📚 상세 문서
+
+- [`CLAUDE.md`](./CLAUDE.md) — 프로젝트 전체 워크플로우·원칙 (Source of Truth 최상위)
+- [`docs/AI_AGENTS.md`](./docs/AI_AGENTS.md) — AI 에이전트 역할 분리, 승인 게이트, 실제 충돌 사례
+- [`docs/defects/`](./docs/defects/) — 발견한 결함 정식 리포트
+- [`docs/troubleshooting/`](./docs/troubleshooting/) — 실전 문제 해결 사례
+- [`docs/roadmap/ROADMAP.md`](./docs/roadmap/ROADMAP.md) — 자동화 개발 Roadmap 및 진행 현황
+- [`docs/automation/AUTOMATION_GUIDE.md`](./docs/automation/AUTOMATION_GUIDE.md) — 자동화 코드 개발 기준
 
 ## 기술 스택
 
 | 항목 | 선택 |
 |---|---|
-| 언어 | Python (자동화 코드 한정 PEP8 예외: 4칸 들여쓰기, snake_case) |
+| 언어 | Python (자동화 코드 한정 PEP8: 4칸 들여쓰기, snake_case) |
 | 자동화 도구 | Selenium WebDriver |
 | 테스트 러너 | pytest |
 | 설계 패턴 | Page Object Model |
 | 리포팅 | pytest-html + JUnit XML |
 | CI/CD | GitHub Actions |
 | 알림 | Slack (CI 결과 알림 전용) |
+| 협업 도구 | Google Sheets (TC/자동화 대상 관리), Claude Code Sub Agent |
 
-## 주요 문서
+## License
 
-- [`CLAUDE.md`](./CLAUDE.md) — 프로젝트 전체 워크플로우 및 원칙 (Source of Truth 최상위)
-- [`docs/prd/project-prd.md`](./docs/prd/project-prd.md) — Project PRD
-- [`docs/roadmap/ROADMAP.md`](./docs/roadmap/ROADMAP.md) — 자동화 개발 Roadmap 및 진행 현황
-- [`docs/automation/AUTOMATION_GUIDE.md`](./docs/automation/AUTOMATION_GUIDE.md) — 자동화 코드 개발 기준
-- [`docs/setup/WINDOWS_SETUP.md`](./docs/setup/WINDOWS_SETUP.md) — Windows 로컬 환경(AI Agent/Git/CI) 세팅 절차
-
-## 진행 현황
-
-Feature Phase 1~7(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니,
-상품 상세, 페이지별 UI — Approved TC 76건)과 Phase Final(GitHub Actions CI + Slack 알림
-연동)까지 구현이 완료되어 있습니다. 상세 진행 이력은
-[`docs/roadmap/ROADMAP.md`](./docs/roadmap/ROADMAP.md) 9절을 참고하세요.
+[MIT](./LICENSE)
