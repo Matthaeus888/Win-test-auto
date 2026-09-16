@@ -48,6 +48,7 @@ gates.**
 | Defect discovery & analysis | 2 real production defects, each with reproduction steps, root cause, and rule-out reasoning | [docs/defects/](./docs/defects/) |
 | CI/CD pipeline | GitHub Actions with push/schedule/manual triggers, headless Chrome, artifact upload | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |
 | Problem solving | Handled third-party ad overlay interception, a headless-only bug, and a CI conditional logic bug | [docs/troubleshooting/](./docs/troubleshooting/) |
+| Security (shift-left) | Dependency vulnerability scanning with `pip-audit`, run both pre-push locally and in CI, producing a human-reviewed Markdown report | [scripts/security_check/](./scripts/security_check/) |
 
 ## QA Process
 
@@ -103,6 +104,18 @@ flowchart TD
 | Page UI | 21 | ✅ |
 | **Total** | **76** | **79 pytest cases** (some TCs expand via parametrization) |
 
+## Dependency Security Check
+
+Rather than automating security decisions away, this adds a **shift-left
+check that still leaves the judgment call to a human**:
+`scripts/security_check/run_security_check.py` runs `pip-audit` against every
+`requirements.txt` in the project and writes a Markdown report (vulnerability
+ID, fixed version, description). It's meant to be run locally right before a
+push is approved, and also runs on every CI execution (`continue-on-error:
+true`, report uploaded as the `security-report` artifact) — it never runs Git
+commands itself, and a vulnerability finding never blocks or auto-approves a
+commit/push on its own.
+
 ## Running Locally
 
 ```bash
@@ -124,6 +137,7 @@ pytest tests/test_login.py
 | Design pattern | Page Object Model |
 | Reporting | pytest-html + JUnit XML |
 | CI/CD | GitHub Actions |
+| Security | pip-audit (dependency vulnerabilities, local + CI) |
 | Notifications | Slack (CI results only) |
 
 ## License

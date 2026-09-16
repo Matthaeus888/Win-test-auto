@@ -59,6 +59,7 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 | **결함 발견·분석 능력** | 실제 프로덕션 결함 2건을 재현 절차·근본 원인·판정 근거까지 갖춘 정식 리포트로 기록 | [docs/defects/](./docs/defects/) |
 | **CI/CD 파이프라인 구축** | GitHub Actions로 push/스케줄/수동 실행 3가지 트리거, headless Chrome, Artifact 업로드 | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |
 | **문제 해결 능력** | 제3자 광고 오버레이 간섭, headless 환경 결함, CI 조건식 논리 오류 등 실전 이슈 해결 | [docs/troubleshooting/](./docs/troubleshooting/) |
+| **보안 점검(Shift-Left)** | `pip-audit`으로 의존성 취약점을 Push 전 로컬 + CI 양쪽에서 점검, 사람이 검토할 Markdown 리포트로 산출 | [scripts/security_check/](./scripts/security_check/) |
 
 ## 🔄 QA 프로세스
 
@@ -118,6 +119,21 @@ flowchart TD
 |---|---|
 | [ad-overlay.md](./docs/troubleshooting/ad-overlay.md) | 제3자 광고 오버레이의 클릭 가로채임 대응 — 잘못된 최적화가 오히려 회귀를 유발했던 경험 포함 |
 | [flaky-tests.md](./docs/troubleshooting/flaky-tests.md) | headless 전용 결함, CI 조건식 논리 오류, "알려진 결함"과 "새로운 결함" 구분 원칙 |
+
+## 🔒 의존성 보안 점검
+
+Push 자동화가 아니라 **판단을 사람에게 맡기는 보안 점검**을 추가했습니다.
+
+- `scripts/security_check/run_security_check.py`가 `pip-audit`으로
+  `automation/`, `scripts/notify_slack/`, `scripts/sheets_sync/`의
+  `requirements.txt`를 점검하고, 취약점 ID·수정 버전·설명이 정리된 Markdown
+  리포트를 생성합니다.
+- **로컬**: Git Push를 승인받기 직전에 실행해 리포트를 먼저 검토하는 용도.
+- **CI**: 매 실행마다 동일한 스크립트를 돌리고 리포트를 `security-report`
+  Artifact로 업로드합니다. `continue-on-error: true`로 설정해 취약점이
+  발견돼도 CI Job 자체를 실패시키지는 않습니다 — 이 스크립트는 Git 명령을
+  전혀 실행하지 않으며, 취약점이 있어도 Commit/Push 여부는 항상 사람이
+  결정합니다([CLAUDE.md 14·18절](./CLAUDE.md)).
 
 ## 🤖 AI 에이전트 기반 개발
 
@@ -182,8 +198,9 @@ qa-automation-portfolio/
 │   ├── config/, utils/, test_data/
 │   └── conftest.py, requirements.txt, pytest.ini
 ├── scripts/
-│   ├── notify_slack/               # CI 실패 시 Slack Webhook 알림
-│   └── sheets_sync/                # TC ↔ Google Sheets 연동
+│   ├── notify_slack/                # CI 실패 시 Slack Webhook 알림
+│   ├── sheets_sync/                 # TC ↔ Google Sheets 연동
+│   └── security_check/              # 🔒 pip-audit 의존성 보안 점검 (로컬+CI)
 ├── .github/workflows/ci.yml        # GitHub Actions CI
 ├── .claude/agents/, .claude/skills/ # Sub Agent / Skill 정의
 └── CLAUDE.md                       # 프로젝트 최상위 지침 (Source of Truth)
@@ -197,6 +214,7 @@ qa-automation-portfolio/
 - [`docs/troubleshooting/`](./docs/troubleshooting/) — 실전 문제 해결 사례
 - [`docs/roadmap/ROADMAP.md`](./docs/roadmap/ROADMAP.md) — 자동화 개발 Roadmap 및 진행 현황
 - [`docs/automation/AUTOMATION_GUIDE.md`](./docs/automation/AUTOMATION_GUIDE.md) — 자동화 코드 개발 기준
+- [`scripts/security_check/README.md`](./scripts/security_check/README.md) — 의존성 보안 점검(pip-audit) 사용법과 설계 원칙
 
 ## 기술 스택
 
@@ -208,6 +226,7 @@ qa-automation-portfolio/
 | 설계 패턴 | Page Object Model |
 | 리포팅 | pytest-html + JUnit XML |
 | CI/CD | GitHub Actions |
+| 보안 점검 | pip-audit (의존성 취약점, 로컬+CI) |
 | 알림 | Slack (CI 결과 알림 전용) |
 | 협업 도구 | Google Sheets (TC/자동화 대상 관리), Claude Code Sub Agent |
 
