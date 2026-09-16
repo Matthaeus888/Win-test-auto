@@ -26,6 +26,10 @@ automation/reports/*
 !automation/reports/.gitkeep
 automation/.env
 
+# Push 전 로컬 보안 점검 리포트 (scripts/security_check/README.md 참고, 매 실행마다 생성됨)
+scripts/security_check/reports/*
+!scripts/security_check/reports/.gitkeep
+
 # shrimp-task-manager MCP DATA_DIR (자체 .git을 가진 별도 저장소이며 이 프로젝트 소스가 아님)
 shrimp_data/
 
