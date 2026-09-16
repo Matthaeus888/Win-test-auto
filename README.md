@@ -120,6 +120,7 @@ flowchart TD
 | [ad-overlay.md](./docs/troubleshooting/ad-overlay.md) | 제3자 광고 오버레이의 클릭 가로채임 대응 — 잘못된 최적화가 오히려 회귀를 유발했던 경험 포함 |
 | [flaky-tests.md](./docs/troubleshooting/flaky-tests.md) | headless 전용 결함, CI 조건식 논리 오류, "알려진 결함"과 "새로운 결함" 구분 원칙 |
 | [ci-secrets-setup.md](./docs/troubleshooting/ci-secrets-setup.md) | 저장소 이전 후 CI 반복 실패 진단기 — 관리자 인증 없이 간접 신호만으로 원인을 좁혀 GitHub Secrets 설정 실수(Name/Value 혼동)를 찾아낸 과정 |
+| [ci-token-efficiency.md](./docs/troubleshooting/ci-token-efficiency.md) | 🪙 토큰 절약을 위한 아이디어와 구현 — `paths-ignore`/`concurrency`로 불필요한 CI 실행 제거, AI 에이전트의 CI 모니터링 폴링 전략 개선 |
 
 ## 🔒 의존성 보안 점검
 

@@ -3,10 +3,24 @@ name: QA Automation CI
 on:
   push:
     branches: [master]
+    # 문서/포트폴리오 파일만 바뀐 커밋은 Selenium 스위트 전체(5~10분)를 돌릴 필요가
+    # 없으므로 CI 트리거에서 제외한다. schedule/workflow_dispatch는 영향받지 않는다
+    # (paths-ignore는 push/pull_request 트리거에만 적용됨).
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
   schedule:
     # 매일 한국시간(KST, UTC+9) 오전 9시 = UTC 00:00
     - cron: '0 0 * * *'
   workflow_dispatch:
+
+# 같은 브랜치에 짧은 간격으로 연속 push되면(예: 문서 수정 커밋을 여러 번 이어 붙이는 경우)
+# 이전 실행은 어차피 최신 커밋으로 대체되므로 취소하고, 마지막 커밋에 대해서만 실행한다.
+# schedule 실행끼리는 서로 취소하지 않도록 트리거별로 그룹을 분리한다.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   automation-test:
