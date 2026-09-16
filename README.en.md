@@ -6,7 +6,7 @@
 designed and automated with AI agents governed by explicit human approval
 gates.**
 
-[![CI](https://github.com/Matthaeus888/Win-test-auto/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/Win-test-auto/actions/workflows/ci.yml)
+[![CI](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Selenium](https://img.shields.io/badge/selenium-4.x-43B02A)
 ![pytest](https://img.shields.io/badge/pytest-passing-0A9EDC)

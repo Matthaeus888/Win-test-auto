@@ -5,7 +5,7 @@
 **요구사항 정의부터 CI 결과 알림까지 — QA 프로세스 전체를 설계하고, AI 에이전트를
 승인 게이트로 통제하며 자동화한 프로젝트**
 
-[![CI](https://github.com/Matthaeus888/Win-test-auto/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/Win-test-auto/actions/workflows/ci.yml)
+[![CI](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Selenium](https://img.shields.io/badge/selenium-4.x-43B02A)
 ![pytest](https://img.shields.io/badge/pytest-passing-0A9EDC)
