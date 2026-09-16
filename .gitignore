@@ -6,6 +6,12 @@
 service-account*.json
 *-credentials.json
 credentials.json
+client_secret*.json
+*oauth_token*.json
+authorized_user*.json
+
+# 서비스 계정/OAuth 인증을 직접 다루는 로컬 전용 유틸리티 (보안 검토 전 커밋 제외)
+scripts/sheets_sync/record_test_results.py
 
 # Python
 __pycache__/
