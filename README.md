@@ -20,7 +20,7 @@
 
 ## 📌 3줄 요약
 
-- 이커머스 연습 사이트([automationexercise.com](https://automationexercise.com/))를 대상으로, **PRD 작성 → TC 설계 → 자동화 대상 선정 → Roadmap → 코드 구현 → CI/CD → Slack 알림**까지 QA 프로세스 전체를 설계·구현했습니다.
+- 이커머스 연습 사이트([automationexercise.com](https://automationexercise.com/))를 대상으로, **PRD 작성 → TC 설계/작성 → 자동화 대상 선정 → Roadmap → 코드 구현 → CI/CD → Slack 알림과 구글스프레드시트에 결과 작성**까지 QA 프로세스 전체를 설계·구현했습니다.
 - 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 **76건의 Test Case를 자동화**(Selenium + pytest + Page Object Model)했습니다.
 - 테스트 자동화 과정에서 **실제 프로덕션 결함 2건을 발견**하고 재현 절차·근본 원인까지 분석해 정식 리포트로 남겼습니다. → [결함 리포트 보기](./docs/defects/README.md)
 
