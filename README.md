@@ -54,7 +54,7 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 세션 처리 결함**으로 판정해 정식 리포트로 남겼습니다 → [DEF-001 상세 보기](./docs/defects/DEF-001-logout-session-not-terminated.md)
 
 [테스트 완료 - CD 산출물(Google sheet)]
-<img width="1020" height="652" alt="스크린샷 2026-09-16 153833" src="https://github.com/user-attachments/assets/ba5a68e8-1b7d-4883-a37e-70e75270ad35" />
+<img width="1830" height="925" alt="스크린샷 2026-09-16 155531" src="https://github.com/user-attachments/assets/dfbea614-7ea2-434f-a31a-8eba75c4b32d" />
 
 [테스트 완료 - CD 산출물(Slack Webhook)]
 <img width="888" height="736" alt="스크린샷 2026-09-16 150953" src="https://github.com/user-attachments/assets/defa9f04-4fd6-4f37-aa7f-b6da031c8ed6" />
