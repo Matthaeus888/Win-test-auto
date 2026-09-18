@@ -24,10 +24,10 @@
 
 1.이커머스 연습 사이트[(automationexercise.com)](https://automationexercise.com)를 대상으로, PRD 작성 → TC 설계/작성 → 자동화 대상 선정 및 계획 → 코드 구현 → CI/CD(자동화 테스트 포함) → Slack 알림과 구글스프레드시트에 결과 작성까지 QA 프로세스 전체를 설계·구현했습니다.
 
-2.요구사항 작성, TC 작성, 자동화 선별, 계획, 자동화 작성 AI agent를 생성해서 각 단계별로 역할을 나눠 맡되, 사람의 최종 승인이 필요한 지점(요구사항 확정, 자동화 대상 선정, 코드 저장, 코드 업로드)에서는 반드시 사람 승인을 받아야만 다음 단계로 넘어가도록 강제했습니다(CLAUDE.md) 
+2.요구사항 작성, TC 작성, 자동화 선별, 계획, 자동화 작성 AI agent를 생성해서 각 단계별로 역할을 나눠 맡되, 사람의 최종 승인이 필요한 지점(요구사항 확정, 자동화 대상 선정, 코드 저장, 코드 업로드)에서는 반드시 사람 승인을 받아야만 다음 단계로 넘어가도록 강제했습니다(CLAUDE.md)
 
-3.7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 76건의 Test Case를 자동화(Selenium + pytest + Page Object Model)했습니다.
-테스트 자동화 과정에서 실제 프로덕션 결함 2건을 발견하고 재현 절차·근본 원인까지 분석해 정식 리포트로 남겼습니다. → [결함 리포트 보기](./docs/defects/README.md)
+3.이커머스 연습 사이트의 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 76건의 Test Case를 자동화(Selenium + pytest + Page Object Model)했습니다.
+테스트 자동화 과정에서 실제 결함 2건을 발견하고 재현 절차·근본 원인까지 분석해 이슈 리포트를 생성했습니다. → [결함 리포트 보기](./docs/defects/README.md)
 
 
 ## 실행 결과 예시
@@ -53,6 +53,13 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 
 10건은 정상 통과했고, 실패한 1건은 자동화 코드 결함이 아니라 **실제 대상 사이트의
 세션 처리 결함**으로 판정해 정식 리포트로 남겼습니다 → [DEF-001 상세 보기](./docs/defects/DEF-001-logout-session-not-terminated.md)
+
+[테스트 완료 - 결과물(Google sheet)
+<img width="1020" height="652" alt="스크린샷 2026-09-16 153833" src="https://github.com/user-attachments/assets/ba5a68e8-1b7d-4883-a37e-70e75270ad35" />
+
+[테스트 완료 - 산출물(Slack Webhook)
+<img width="888" height="736" alt="스크린샷 2026-09-16 150953" src="https://github.com/user-attachments/assets/defa9f04-4fd6-4f37-aa7f-b6da031c8ed6" />
+
 
 ## 이 프로젝트로 증명하는 역량
 
