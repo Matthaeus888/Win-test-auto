@@ -3,6 +3,7 @@
 # QA Automation Portfolio
 
 **CI/CD 기반 QA의 전체 프로세스를 AI agent가 실행하며 사람이 판단,통제하는 자동화 프로젝트**
+                     
                      업무 리소스 **개선**, 품질 **향상**, 프로세스 **효율화** 
 [![CI](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
@@ -11,7 +12,7 @@
 ![Tests](https://img.shields.io/badge/automated_TCs-76-informational)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
-[English README](./README.en.md) · [이슈 리포트](./docs/defects/README.md) · [트러블슈팅](./docs/troubleshooting/) · [AI 에이전트 설계](./docs/AI_AGENTS.md)
+[이슈 리포트](./docs/defects/README.md) · [트러블슈팅](./docs/troubleshooting/) · [AI 에이전트 설계](./docs/AI_AGENTS.md)
 
 </div>
 
