@@ -54,10 +54,10 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 10건은 정상 통과했고, 실패한 1건은 자동화 코드 결함이 아니라 **실제 대상 사이트의
 세션 처리 결함**으로 판정해 정식 리포트로 남겼습니다 → [DEF-001 상세 보기](./docs/defects/DEF-001-logout-session-not-terminated.md)
 
-[테스트 완료 - 결과물(Google sheet)
+[테스트 완료 - CD 산출물(Google sheet)]
 <img width="1020" height="652" alt="스크린샷 2026-09-16 153833" src="https://github.com/user-attachments/assets/ba5a68e8-1b7d-4883-a37e-70e75270ad35" />
 
-[테스트 완료 - 산출물(Slack Webhook)
+[테스트 완료 - CD 산출물(Slack Webhook)]
 <img width="888" height="736" alt="스크린샷 2026-09-16 150953" src="https://github.com/user-attachments/assets/defa9f04-4fd6-4f37-aa7f-b6da031c8ed6" />
 
 
