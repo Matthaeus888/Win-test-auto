@@ -20,15 +20,14 @@
 
 ## 프로젝트 소개
 
-**QA 진행시, 사람이 최종 판단하며 AI가 반복적인 작업을 보조해 업무 리소스와 품질 향상을 위한 자동화 프로젝트** 
+**QA 진행시, 사람이 최종 판단하고 AI가 반복적인 작업을 보조해 업무 리소스와 품질 향상을 위한 자동화 프로젝트** 
 
-1.이커머스 연습 사이트[(automationexercise.com)](https://automationexercise.com)를 대상으로, PRD 작성 → TC 설계/작성 → 자동화 대상 선정 및 계획 → 코드 구현 → CI/CD(자동화 테스트 포함) → Slack 알림과 구글스프레드시트에 결과 작성까지 QA 프로세스 전체를 설계·구현했습니다.
-
-2.요구사항 작성, TC 작성, 자동화 선별, 계획, 자동화 작성 AI agent를 생성해서 각 단계별로 역할을 나눠 맡되, 사람의 최종 승인이 필요한 지점(요구사항 확정, 자동화 대상 선정, 코드 저장, 코드 업로드)에서는 반드시 사람 승인을 받아야만 다음 단계로 넘어가도록 강제했습니다(CLAUDE.md)
-
-3.이커머스 연습 사이트의 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 76건의 Test Case를 자동화(Selenium + pytest + Page Object Model)했습니다.
+1.이커머스 연습 사이트의 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 76건의 Test Case를 자동화(Selenium + pytest + Page Object Model)했습니다.
 테스트 자동화 과정에서 실제 결함 2건을 발견하고 재현 절차·근본 원인까지 분석해 이슈 리포트를 생성했습니다. → [결함 리포트 보기](./docs/defects/README.md)
 
+2.이커머스 연습 사이트[(automationexercise.com)](https://automationexercise.com)를 대상으로, PRD 작성 → TC 설계/작성 → 자동화 대상 선정 및 계획 → 코드 구현 → CI/CD(자동화 테스트 포함) → Slack 알림과 구글스프레드시트에 결과 작성까지 QA 프로세스 전체를 설계·구현했습니다.
+
+3.요구사항 작성, TC 작성, 자동화 선별, 계획, 자동화 작성 AI agent를 생성해서 각 단계별로 역할을 나눠 맡되, 사람의 최종 승인이 필요한 지점(요구사항 확정, 자동화 대상 선정, 코드 저장, 코드 업로드)에서는 반드시 사람 승인을 받아야만 다음 단계로 넘어가도록 강제했습니다(CLAUDE.md)
 
 ## 실행 결과 예시
 
@@ -59,6 +58,8 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 
 [테스트 완료 - CD 산출물(Slack Webhook)]
 <img width="888" height="736" alt="스크린샷 2026-09-16 150953" src="https://github.com/user-attachments/assets/defa9f04-4fd6-4f37-aa7f-b6da031c8ed6" />
+
+[테스트 완료 - CD 산출물(이슈 리포트)
 
 
 ## 이 프로젝트로 증명하는 역량
@@ -116,7 +117,7 @@ flowchart TD
 - 모든 Page Object가 `BasePage`를 상속해, 광고 오버레이 방어·클릭 재시도 로직을
   한 곳에서만 구현하고 전체에 일관 적용합니다(상세: [트러블슈팅 문서](./docs/troubleshooting/ad-overlay.md)).
 
-## 🐛 발견한 결함
+## 발견한 결함
 
 | ID | 제목 | 심각도 |
 |---|---|---|
@@ -126,7 +127,7 @@ flowchart TD
 각 리포트에는 재현 절차, 기대/실제 결과, 스크린샷 증거, 근본 원인 추정, 그리고
 **"자동화 코드 문제가 아님을 어떻게 배제했는가"** 판정 근거가 포함되어 있습니다.
 
-## 🔧 트러블슈팅 사례
+## 트러블슈팅 사례
 
 | 문서 | 내용 |
 |---|---|
@@ -135,7 +136,7 @@ flowchart TD
 | [ci-secrets-setup.md](./docs/troubleshooting/ci-secrets-setup.md) | 저장소 이전 후 CI 반복 실패 진단기 — 관리자 인증 없이 간접 신호만으로 원인을 좁혀 GitHub Secrets 설정 실수(Name/Value 혼동)를 찾아낸 과정 |
 | [ci-token-efficiency.md](./docs/troubleshooting/ci-token-efficiency.md) | 🪙 토큰 절약을 위한 아이디어와 구현 — `paths-ignore`/`concurrency`로 불필요한 CI 실행 제거, AI 에이전트의 CI 모니터링 폴링 전략 개선 |
 
-## 🔒 의존성 보안 점검
+## 의존성 보안 점검
 
 Push 자동화가 아니라 **판단을 사람에게 맡기는 보안 점검**을 추가했습니다.
 
@@ -150,7 +151,7 @@ Push 자동화가 아니라 **판단을 사람에게 맡기는 보안 점검**�
   전혀 실행하지 않으며, 취약점이 있어도 Commit/Push 여부는 항상 사람이
   결정합니다([CLAUDE.md 14·18절](./CLAUDE.md)).
 
-## 🤖 AI 에이전트 기반 개발
+## AI 에이전트 기반 개발
 
 이 프로젝트는 Claude Code 기반 **Sub Agent 5종**(PRD 작성 → TC 작성 → 자동화 대상
 선정 → Roadmap 작성 → 자동화 구현)으로 역할을 분리하고, Commit·Push·자동화 대상
@@ -158,7 +159,7 @@ Push 자동화가 아니라 **판단을 사람에게 맡기는 보안 점검**�
 AI가 무엇을 자율적으로 하고 무엇은 반드시 사람이 결정하도록 설계했는지, 실제로
 산출물 간 충돌이 발생했을 때 어떻게 처리했는지는 [`docs/AI_AGENTS.md`](./docs/AI_AGENTS.md)에서 확인할 수 있습니다.
 
-## 📊 테스트 현황
+## 테스트 현황
 
 | Feature | 승인된 TC 수 | 자동화 여부 |
 |---|---|---|
@@ -195,7 +196,7 @@ headless Chrome으로 실행하고, 실패 시에만 Slack으로 알립니다.
 - 매일 한국시간(KST) 오전 9시 스케줄 실행
 - GitHub Actions 탭에서 수동 실행(workflow_dispatch)
 
-## 📁 프로젝트 구조
+## 프로젝트 구조
 
 ```
 qa-automation-portfolio/
@@ -221,7 +222,7 @@ qa-automation-portfolio/
 └── CLAUDE.md                       # 프로젝트 최상위 지침 (Source of Truth)
 ```
 
-## 📚 상세 문서
+## 상세 문서
 
 - [`CLAUDE.md`](./CLAUDE.md) — 프로젝트 전체 워크플로우·원칙 (Source of Truth 최상위)
 - [`docs/AI_AGENTS.md`](./docs/AI_AGENTS.md) — AI 에이전트 역할 분리, 승인 게이트, 실제 충돌 사례
