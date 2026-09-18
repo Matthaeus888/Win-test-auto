@@ -38,11 +38,11 @@ cp .env.example .env
 
 | 환경변수 | 필수 | 설명 |
 |---|---|---|
-| `GOOGLE_SERVICE_ACCOUNT_FILE` | 필수 | 서비스 계정 키 JSON 파일의 로컬 경로 (TC/Candidate 공통) |
+| `GOOGLE_SERVICE_ACCOUNT_FILE` | 필수 | 서비스 계정 키 JSON 파일의 로컬 경로 (TC/Judge 공통) |
 | `GOOGLE_SHEET_ID` | 필수 (`list`/`append`용) | TC를 기록할 대상 Spreadsheet ID (URL의 `/d/{ID}/edit` 부분) |
 | `GOOGLE_WORKSHEET_NAME` | 선택 (기본값 `TC`) | TC를 기록할 워크시트(탭) 이름 |
-| `GOOGLE_CANDIDATE_SHEET_ID` | 필수 (`candidate-*`용) | Automation Candidate 평가를 기록할 Spreadsheet ID. **`GOOGLE_SHEET_ID`와는 별개의 Spreadsheet 문서**여야 합니다(같은 문서의 다른 탭이 아님) |
-| `GOOGLE_CANDIDATE_WORKSHEET_NAME` | 선택 (기본값 `Automation Candidates`) | `GOOGLE_CANDIDATE_SHEET_ID` 안에서 Automation Candidate 평가를 기록할 워크시트(탭) 이름 |
+| `GOOGLE_JUDGE_SHEET_ID` | 필수 (`judge-*`용) | Automation Judge 평가를 기록할 Spreadsheet ID. **`GOOGLE_SHEET_ID`와는 별개의 Spreadsheet 문서**여야 합니다(같은 문서의 다른 탭이 아님) |
+| `GOOGLE_JUDGE_WORKSHEET_NAME` | 선택 (기본값 `Automation Judge`) | `GOOGLE_JUDGE_SHEET_ID` 안에서 Automation Judge 평가를 기록할 워크시트(탭) 이름 |
 
 `.env`는 셸에서 직접 로드하거나(`export $(grep -v '^#' .env | xargs)` 등), 프로젝트에서 사용 중인
 방식에 맞춰 로드한 뒤 아래 명령을 실행합니다.
@@ -69,12 +69,12 @@ python scripts/sheets_sync/sheets_sync.py append --input docs/tc/login-logout.md
 `append`는 시트에 이미 존재하는 TC ID와 충돌하면 기본적으로 실패합니다. 의도된 상황이 아니라면
 ID naming을 다시 확인하세요.
 
-## Automation Candidate Spreadsheet
+## Automation Judge Spreadsheet
 
-`automation-candidate-agent`가 사용하는 **별도 Google Spreadsheet 문서**입니다(`GOOGLE_SHEET_ID`
-의 TC 시트와 같은 문서의 다른 탭이 아니라, `GOOGLE_CANDIDATE_SHEET_ID`로 지정하는 완전히 다른
+`automation-judge-agent`가 사용하는 **별도 Google Spreadsheet 문서**입니다(`GOOGLE_SHEET_ID`
+의 TC 시트와 같은 문서의 다른 탭이 아니라, `GOOGLE_JUDGE_SHEET_ID`로 지정하는 완전히 다른
 문서). 이 문서/워크시트만 예외적으로 "AI 작성 컬럼(TC ID, 6개 평가 점수, Automation Score,
-Candidate, 선정/제외 사유)"을 재평가 시 업데이트할 수 있는 `candidate-sync` 명령을 제공합니다.
+Judge, 선정/제외 사유)"을 재평가 시 업데이트할 수 있는 `judge-sync` 명령을 제공합니다.
 이 update는 항상 AI 작성 컬럼 범위로만 제한되며, 사용자가 Sheet에서 직접 입력하는 `QA Decision`
 / `QA Comment` 컬럼은 이 모듈의 어떤 명령으로도 절대 쓰지 않습니다(조회만 가능).
 
@@ -82,26 +82,26 @@ TC 시트와 마찬가지로 이 Spreadsheet 문서도 서비스 계정에 "편�
 합니다(위 "1. Google Cloud 서비스 계정 준비" 참조 — 대상 문서만 다를 뿐 설정 절차는 동일).
 
 `QA Decision` 컬럼에 입력 가능한 값은 정확히 `Approved` / `Rejected` / `Hold` 세 가지뿐입니다
-(대소문자·공백까지 정확히 일치해야 함). `candidate-create-worksheet`로 워크시트를 처음 생성할 때
+(대소문자·공백까지 정확히 일치해야 함). `judge-create-worksheet`로 워크시트를 처음 생성할 때
 이 세 값만 선택할 수 있는 Dropdown(Data Validation)을 QA Decision 컬럼에 자동으로 적용합니다
 (gspread 버전에 따라 적용에 실패할 수 있으며, 실패해도 워크시트 생성 자체는 계속 진행됩니다 —
-최종 검증은 `automation-candidate-agent`의 Validation이 담당합니다). 이 워크시트를 삭제 후 다시
+최종 검증은 `automation-judge-agent`의 Validation이 담당합니다). 이 워크시트를 삭제 후 다시
 만들지 않는 한 기존 워크시트에는 소급 적용되지 않습니다.
 
 ```bash
-# 최초 1회, Candidate 워크시트가 없을 때만 생성 (이미 있으면 에러로 중단)
-python scripts/sheets_sync/sheets_sync.py candidate-create-worksheet
+# 최초 1회, Judge 워크시트가 없을 때만 생성 (이미 있으면 에러로 중단)
+python scripts/sheets_sync/sheets_sync.py judge-create-worksheet
 
-# Candidate 문서의 AI 평가 결과 표만 파싱해 Sheet에 반영 (신규 TC는 추가, 기존 TC는 AI 컬럼만 갱신)
-python scripts/sheets_sync/sheets_sync.py candidate-sync \
-    --input docs/tc/automation-candidates/login-logout.md --dry-run
+# Judge 문서의 AI 평가 결과 표만 파싱해 Sheet에 반영 (신규 TC는 추가, 기존 TC는 AI 컬럼만 갱신)
+python scripts/sheets_sync/sheets_sync.py judge-sync \
+    --input docs/tc/automation-judge/login-logout.md --dry-run
 
 # 실제로 반영
-python scripts/sheets_sync/sheets_sync.py candidate-sync \
-    --input docs/tc/automation-candidates/login-logout.md
+python scripts/sheets_sync/sheets_sync.py judge-sync \
+    --input docs/tc/automation-judge/login-logout.md
 
-# QA Decision/QA Comment를 포함한 Candidate 워크시트 전체 조회 (사용자 입력 반영, 확정 전 Validation용)
-python scripts/sheets_sync/sheets_sync.py candidate-list
+# QA Decision/QA Comment를 포함한 Judge 워크시트 전체 조회 (사용자 입력 반영, 확정 전 Validation용)
+python scripts/sheets_sync/sheets_sync.py judge-list
 ```
 
 ## 입력 TC 파일 형식

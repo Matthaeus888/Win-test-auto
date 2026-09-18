@@ -1,13 +1,13 @@
 ---
-name: automation-candidate
-description: 자동화 대상 선정 평가 스킬 - 승인된 TC의 자동화 적합성을 Business Criticality/Regression Frequency/Automation Stability/Result Determinism/Manual Test Cost/Maintenance Cost 6개 축으로 평가하는 Automation Score 기준, 우선 선정/후순위 신호, Score와 무관한 Hard Rule, Candidate(Yes/No/Hold) 판정 기준을 정의합니다. 자동화 후보를 평가하는 모든 Agent가 이 Skill을 로드해서 따르며, 특정 프로젝트에 종속되지 않고 다른 QA 프로젝트에서도 재사용 가능합니다.
+name: automation-judge
+description: 자동화 대상 선정 평가 스킬 - 승인된 TC의 자동화 적합성을 Business Criticality/Regression Frequency/Automation Stability/Result Determinism/Manual Test Cost/Maintenance Cost 6개 축으로 평가하는 Automation Score 기준, 우선 선정/후순위 신호, Score와 무관한 Hard Rule, Judge(Yes/No/Hold) 판정 기준을 정의합니다. 자동화 후보를 평가하는 모든 Agent가 이 Skill을 로드해서 따르며, 특정 프로젝트에 종속되지 않고 다른 QA 프로젝트에서도 재사용 가능합니다.
 ---
 
-# Automation Candidate Skill
+# Automation Judge Skill
 
-이 Skill은 **자동화 대상 선정 평가 기준(Automation Score 산정 방식, Candidate 판정 기준)**만
+이 Skill은 **자동화 대상 선정 평가 기준(Automation Score 산정 방식, Judge 판정 기준)**만
 정의합니다. 평가 Workflow(TC 확인 → 평가 → Sheet 동기화 → 사용자 QA Decision 확인 등)는 이
-Skill의 책임이 아니며, 이를 사용하는 Agent(예: `automation-candidate-agent`)가 담당합니다. 이
+Skill의 책임이 아니며, 이를 사용하는 Agent(예: `automation-judge-agent`)가 담당합니다. 이
 Skill은 특정 프로젝트명, 서비스명, TC 내용을 알지 못하는 상태를 전제로 작성되었으며, 어떤 QA
 프로젝트에서도 동일하게 재사용할 수 있어야 합니다.
 
@@ -17,9 +17,9 @@ Skill은 특정 프로젝트명, 서비스명, TC 내용을 알지 못하는 상
   UI 구조가 자주 바뀌면 자동화 부적합할 수 있고, P2 TC라도 매 Release마다 반복 수행되는 단순
   Regression이면 자동화 ROI가 높을 수 있다.
 - **점수는 판단을 돕는 참고 지표이며, 기계적으로만 적용해 최종 결론을 내리지 않는다.** 아래 3절의
-  Automation Score 구간은 "1차 판단 경향"일 뿐이다. 최종 Candidate는 TC의 실제 목적, 검증하는
+  Automation Score 구간은 "1차 판단 경향"일 뿐이다. 최종 Judge는 TC의 실제 목적, 검증하는
   Risk의 성격, 실제 자동화 ROI(자동화 구현/유지보수 비용 대비 반복 실행으로 얻는 효과)를 함께
-  고려해 판단한다. 점수 구간과 최종 Candidate가 다른 경우, 반드시 그 사유를 서술로 함께 제시한다.
+  고려해 판단한다. 점수 구간과 최종 Judge가 다른 경우, 반드시 그 사유를 서술로 함께 제시한다.
 - **동일한 원인으로 여러 축을 기계적으로 중복 감점하지 않는다.** 특히 Automation Stability(요구
   사항/UI 구조 자체의 변경 가능성)와 Maintenance Cost(구현 이후 유지 비용)는 서로 다른 질문이므로,
   하나의 관찰 사실이 어느 축에 해당하는 원인인지 구분해서 평가한다(2.3 / 2.6 참조). 마찬가지로
@@ -90,7 +90,7 @@ Stability / Result Determinism / Manual Test Cost는 **5점이 자동화에 유�
 Native 동작을 검증하는 TC를 자동화 불가능으로 단정하지 않는다. 실제 사용 예정 자동화 도구가 해당
 동작을 제어/판정할 수 있는지(**기술적 가능성**)를 먼저 확인해 이 축의 점수를 매긴다. 기술적으로는
 판정 가능하더라도 반복 회귀 검증으로서의 실익(**Regression ROI**)이 낮다고 판단되는 경우는 이
-축을 낮추는 근거로 쓰지 않고, 4.3절 정성 분석과 최종 Candidate 판단에서 별도로 반영한다(기술적
+축을 낮추는 근거로 쓰지 않고, 4.3절 정성 분석과 최종 Judge 판단에서 별도로 반영한다(기술적
 가능성과 ROI를 같은 축에서 섞지 않는다).
 
 ### 2.5 Manual Test Cost — TC 1회 수동 수행 비용
@@ -149,8 +149,8 @@ Maintenance Cost는 점수가 높을수록 자동화에 불리하므로, 최종 
 | 6 ~ 11 | 자동화 비추천 |
 
 **주의**: 이 구간은 기계적 최종 판정이 아니라 1차 참고 지표다. **Automation Score만으로
-Candidate 여부를 결정하지 않는다.** 점수 산정 후 4.3절의 추가 정성 분석 항목과 5절 Hard Rule,
-TC 목적/ROI를 함께 검토한 뒤 최종 Candidate(Yes/No/Hold)를 결정하며, 점수 구간과 다르게 판단한
+Judge 여부를 결정하지 않는다.** 점수 산정 후 4.3절의 추가 정성 분석 항목과 5절 Hard Rule,
+TC 목적/ROI를 함께 검토한 뒤 최종 Judge(Yes/No/Hold)를 결정하며, 점수 구간과 다르게 판단한
 경우 그 사유를 반드시 남긴다.
 
 ## 4. 우선 선정 신호 / 후순위·제외 신호
@@ -177,9 +177,9 @@ TC 목적/ROI를 함께 검토한 뒤 최종 Candidate(Yes/No/Hold)를 결정하
 
 ### 4.3 추가 정성 분석 항목 (Automation Score 산정 이후 반드시 검토)
 
-Automation Score를 계산한 뒤, 최종 Candidate(Yes/No/Hold)를 추천하기 전에 다음 항목을 추가로
+Automation Score를 계산한 뒤, 최종 Judge(Yes/No/Hold)를 추천하기 전에 다음 항목을 추가로
 검토한다. 이 항목들은 점수에 이미 반영되지 않은 맥락을 보완하기 위한 것으로, 점수가 높아도 아래
-항목에서 문제가 발견되면 Candidate를 낮추거나 Hold로 조정할 수 있다.
+항목에서 문제가 발견되면 Judge를 낮추거나 Hold로 조정할 수 있다.
 
 - **TC 중복 여부**: 다른 TC 또는 이미 자동화된 TC와 검증 목적이 실질적으로 동일한지
 - **다른 E2E Flow에서 이미 검증되는지**: 다른 자동화 대상 TC의 E2E Flow 안에서 동일한 동작이
@@ -198,7 +198,7 @@ Automation Score를 계산한 뒤, 최종 Candidate(Yes/No/Hold)를 추천하기
 
 아래 규칙은 Automation Score나 4절의 신호와 무관하게 항상 우선 적용된다.
 
-- **현재 발생 중인 결함(비정상 동작)을 정상 Expected Result처럼 고정한 TC는 Candidate: No로
+- **현재 발생 중인 결함(비정상 동작)을 정상 Expected Result처럼 고정한 TC는 Judge: No로
   처리한다.** (참고: `tc-writing` Skill 4.6에 따라 "결함 의심 항목" 섹션으로 분류된 TC가 여기
   해당할 가능성이 높다.) 이런 TC를 자동화하면 실제 결함을 회귀 검증 없이 정상으로 고정시키는
   결과가 되므로, 발견 시 점수 산정과 별개로 반드시 사용자에게 별도로 보고한다.
@@ -206,31 +206,31 @@ Automation Score를 계산한 뒤, 최종 Candidate(Yes/No/Hold)를 추천하기
   재승인되면(즉, 더 이상 "결함을 정상처럼 고정"하는 상태가 아니게 되면), 그 TC는 다시 일반 TC와
   동일한 절차로 재평가할 수 있다.
 
-## 6. Candidate 판정
+## 6. Judge 판정
 
-| Candidate | 의미 |
+| Judge | 의미 |
 |---|---|
 | Yes | 자동화 대상으로 적극 권장 |
 | Hold | 아직 자동화 여부를 확정할 수 없음(정보 부족, 경계 사례, ROI 판단이 애매한 경우 등) — 사용자
         검토가 필요하며, 사용자가 검토 없이는 Approved/Rejected 어느 쪽으로도 자동 전환되지 않는다 |
 | No | 자동화 대상에서 제외 권장 |
 
-Candidate는 항상 Automation Score와 판정 사유(어떤 축이 결정적이었는지, 4절의 어떤 신호와 정성
+Judge는 항상 Automation Score와 판정 사유(어떤 축이 결정적이었는지, 4절의 어떤 신호와 정성
 분석 항목, 혹은 5절 Hard Rule에 해당하는지)를 함께 제시한다. 판정 사유가 부족해 사용자가 근거를
 검토할 수 없는 경우 이 Skill의 목적(자동화 ROI에 대한 근거 있는 1차 판단 제공)에 부합하지 않는다.
 
-**AI가 제시하는 Candidate는 어디까지나 추천이다.** 최종 자동화 대상은 이 평가 결과를 근거로
+**AI가 제시하는 Judge는 어디까지나 추천이다.** 최종 자동화 대상은 이 평가 결과를 근거로
 사용자가 검토하고 승인한 이후에만 확정되며, 이 Skill을 사용하는 Agent는 어떤 TC도 자체적으로
 최종 확정하지 않는다.
 
 ## 7. 평가 시 준수사항
 
-- Candidate 평가는 "자동화 대상으로 적합한지"만 판단하는 것이며, Automation TC 작성이나 자동화
+- Judge 평가는 "자동화 대상으로 적합한지"만 판단하는 것이며, Automation TC 작성이나 자동화
   코드 구현을 의미하지 않는다. 실제 Automation TC/코드는 사용자가 최종 승인한 이후 별도 단계
   (다른 Agent/Skill)에서 진행한다.
 - TC 자체(Test Scenario, Expected Result 등)를 수정하거나 재작성하지 않는다. 이 Skill은 평가만
   다루며, TC 작성 규칙은 `tc-writing` Skill의 책임이다.
-- 최종 Candidate 판단 시 다음과 같은 질문을 함께 고려한다.
+- 최종 Judge 판단 시 다음과 같은 질문을 함께 고려한다.
   - 이 TC가 실패(회귀)했을 때, 자동화가 없다면 얼마나 늦게 발견되는가?
   - 이 TC는 실제로 반복 실행될 가능성이 높은가, 아니면 한두 번 확인 후 다시 볼 일이 없는가?
   - 자동화 이후 예상되는 유지보수 비용이 장기적으로 자동화 효과를 초과할 가능성은 없는가?
@@ -239,7 +239,7 @@ Candidate는 항상 Automation Score와 판정 사유(어떤 축이 결정적이
 
 TC별 평가 결과는 최소한 다음 4개 정보를 포함해야 한다.
 
-`TC ID | Automation Score | Candidate | 선정/제외 사유`
+`TC ID | Automation Score | Judge | 선정/제외 사유`
 
 이보다 상세한 정보(6개 축 개별 점수 등)를 함께 제시하는 것은 권장되며, 아래 컬럼 순서를 기본으로
 사용한다.
@@ -254,7 +254,7 @@ TC별 평가 결과는 최소한 다음 4개 정보를 포함해야 한다.
 | 6 | Manual Test Cost |
 | 7 | Maintenance Cost |
 | 8 | Automation Score |
-| 9 | Candidate (AI 판정) |
+| 9 | Judge (AI 판정) |
 | 10 | 선정/제외 사유 |
 
 실제 문서/Sheet 템플릿(QA Decision, QA Comment 등 사용자 작성 영역 포함)은 이 Skill을 사용하는

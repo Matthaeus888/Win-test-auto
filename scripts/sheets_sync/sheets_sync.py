@@ -1,6 +1,6 @@
 """Google Sheets 연동 모듈 (Sheets 연동 전용, TC 작성 규칙/Workflow는 담당하지 않음).
 
-이 모듈은 tc-agent / automation-candidate-agent가 직접 Google Sheets API를 호출하지 않고,
+이 모듈은 tc-agent / automation-judge-agent가 직접 Google Sheets API를 호출하지 않고,
 이 스크립트를 통해서만 Spreadsheet를 읽고/쓰도록 하기 위한 독립 모듈이다.
 
 설계 원칙 (qa-process 프로젝트 CLAUDE.md 17절 Security/Secret 관리 원칙과 일치):
@@ -10,24 +10,24 @@
   위함이다.
 - append 실행 전, 대상 시트에 이미 존재하는 TC ID와 충돌하는지 확인하고, 충돌 시 기본적으로
   추가를 거부한다(--force 플래그로만 우회 가능하게 하여 실수로 인한 중복 삽입을 방지한다).
-- Candidate 시트(candidate-sync/candidate-list)는 automation-candidate-agent의 "AI 작성
+- Judge 시트(judge-sync/judge-list)는 automation-judge-agent의 "AI 작성
   영역 / 사용자 작성 영역 분리" 요구를 충족하기 위한 예외적인 update 경로를 하나만 제공한다.
-  이 update는 AI 작성 컬럼(TC ID, 6개 평가 점수, Automation Score, Candidate, 선정/제외 사유)
+  이 update는 AI 작성 컬럼(TC ID, 6개 평가 점수, Automation Score, Judge, 선정/제외 사유)
   범위로만 제한되며, 사용자 작성 컬럼(QA Decision, QA Comment)은 이 모듈의 어떤 명령으로도
   절대 쓰지 않는다(읽기만 가능).
 - 이 스크립트는 사용자 승인 이후에만 Agent가 호출해야 한다. 승인 여부 판단은 이 모듈의
   책임이 아니다.
 
 필요 환경변수:
-- GOOGLE_SERVICE_ACCOUNT_FILE: 서비스 계정 키(JSON) 파일 경로 (TC/Candidate 공통)
+- GOOGLE_SERVICE_ACCOUNT_FILE: 서비스 계정 키(JSON) 파일 경로 (TC/Judge 공통)
 - GOOGLE_SHEET_ID: TC를 기록할 대상 Google Spreadsheet의 ID (URL의 /d/{ID}/ 부분). list/append
   명령이 사용한다.
 - GOOGLE_WORKSHEET_NAME: (선택) TC를 기록할 워크시트(탭) 이름. 기본값 "TC"
-- GOOGLE_CANDIDATE_SHEET_ID: Automation Candidate 평가를 기록할 Google Spreadsheet의 ID.
+- GOOGLE_JUDGE_SHEET_ID: Automation Judge 평가를 기록할 Google Spreadsheet의 ID.
   GOOGLE_SHEET_ID와는 **별개의 Spreadsheet 문서**를 가리켜야 한다(같은 문서의 다른 탭이
-  아님). candidate-* 명령이 사용한다.
-- GOOGLE_CANDIDATE_WORKSHEET_NAME: (선택) GOOGLE_CANDIDATE_SHEET_ID 안에서 Automation
-  Candidate 평가를 기록할 워크시트(탭) 이름. 기본값 "Automation Candidates"
+  아님). judge-* 명령이 사용한다.
+- GOOGLE_JUDGE_WORKSHEET_NAME: (선택) GOOGLE_JUDGE_SHEET_ID 안에서 Automation
+  Judge 평가를 기록할 워크시트(탭) 이름. 기본값 "Automation Judge"
 
 필요 라이브러리 (requirements.txt 참조): gspread, google-auth
 
@@ -41,14 +41,14 @@
     # 실제로 Spreadsheet 맨 아래에 추가 (승인된 TC에 대해서만 실행)
     python sheets_sync.py append --input ../../docs/tc/login-logout.md
 
-    # Automation Candidate 워크시트가 없을 때 최초 1회 생성
-    python sheets_sync.py candidate-create-worksheet
+    # Automation Judge 워크시트가 없을 때 최초 1회 생성
+    python sheets_sync.py judge-create-worksheet
 
-    # Candidate 문서의 AI 작성 영역만 Sheet에 동기화 (QA Decision/QA Comment는 건드리지 않음)
-    python sheets_sync.py candidate-sync --input ../../docs/tc/automation-candidates/login-logout.md
+    # Judge 문서의 AI 작성 영역만 Sheet에 동기화 (QA Decision/QA Comment는 건드리지 않음)
+    python sheets_sync.py judge-sync --input ../../docs/tc/automation-judge/login-logout.md
 
-    # Candidate 워크시트 전체 조회 (QA Decision/QA Comment 포함, Validation/재조회용)
-    python sheets_sync.py candidate-list
+    # Judge 워크시트 전체 조회 (QA Decision/QA Comment 포함, Validation/재조회용)
+    python sheets_sync.py judge-list
 
 주의: 이 스크립트는 구조와 인터페이스를 제공하는 것이 목적이며, 실제 서비스 계정 인증정보가
 설정되기 전까지는 --dry-run 없이 실행하면 인증 단계에서 명확한 에러 메시지와 함께 실패한다.
@@ -74,12 +74,12 @@ TC_COLUMNS = [
     "Result",
 ]
 
-# Automation Candidate 워크시트 컬럼. AI 작성 영역과 사용자(QA) 작성 영역을 명확히 분리한다.
-# - AI 작성 영역: automation-candidate-agent가 automation-candidate Skill 기준으로 채우는
-#   평가 결과. candidate-sync 명령은 이 범위(컬럼 1~10)만 쓴다.
+# Automation Judge 워크시트 컬럼. AI 작성 영역과 사용자(QA) 작성 영역을 명확히 분리한다.
+# - AI 작성 영역: automation-judge-agent가 automation-judge Skill 기준으로 채우는
+#   평가 결과. judge-sync 명령은 이 범위(컬럼 1~10)만 쓴다.
 # - 사용자 작성 영역: QA가 Google Sheet에서 직접 입력하는 최종 판단. 이 모듈의 어떤 명령도
 #   이 두 컬럼에는 쓰지 않는다(읽기 전용).
-CANDIDATE_AI_COLUMNS = [
+JUDGE_AI_COLUMNS = [
     "TC ID",
     "Business Criticality",
     "Regression Frequency",
@@ -88,19 +88,19 @@ CANDIDATE_AI_COLUMNS = [
     "Manual Test Cost",
     "Maintenance Cost",
     "Automation Score",
-    "Candidate (AI)",
+    "Judge (AI)",
     "선정/제외 사유",
 ]
-CANDIDATE_USER_COLUMNS = ["QA Decision", "QA Comment"]
-CANDIDATE_COLUMNS = CANDIDATE_AI_COLUMNS + CANDIDATE_USER_COLUMNS
+JUDGE_USER_COLUMNS = ["QA Decision", "QA Comment"]
+JUDGE_COLUMNS = JUDGE_AI_COLUMNS + JUDGE_USER_COLUMNS
 
 # QA Decision 허용값: 정확히 "Approved" / "Rejected" / "Hold" 세 값만 유효하다(대소문자·공백까지
 # 정확히 일치해야 함). 빈 값은 오류가 아니라 "미검토" 상태를 뜻한다. 이 값들에 대한 검증/보정 로직은
-# 이 모듈이 아니라 automation-candidate-agent의 Validation 책임이다 — 이 모듈은 Sheet에 Dropdown
+# 이 모듈이 아니라 automation-judge-agent의 Validation 책임이다 — 이 모듈은 Sheet에 Dropdown
 # (Data Validation)을 걸어 잘못된 값이 애초에 입력되지 않도록 돕는 역할만 한다.
 QA_DECISION_VALUES = ["Approved", "Rejected", "Hold"]
 
-DEFAULT_CANDIDATE_WORKSHEET_NAME = "Automation Candidates"
+DEFAULT_JUDGE_WORKSHEET_NAME = "Automation Judge"
 
 
 class SheetsSyncError(RuntimeError):
@@ -140,24 +140,24 @@ class SheetsConfig:
         )
 
     @classmethod
-    def from_candidate_env(cls) -> "SheetsConfig":
-        """Automation Candidate 평가 전용 설정을 읽는다.
+    def from_judge_env(cls) -> "SheetsConfig":
+        """Automation Judge 평가 전용 설정을 읽는다.
 
         GOOGLE_SHEET_ID(TC를 기록하는 기존 Spreadsheet)와는 별개의 Google Spreadsheet
-        (GOOGLE_CANDIDATE_SHEET_ID)를 사용한다 — 같은 문서의 다른 탭이 아니라 완전히 다른
+        (GOOGLE_JUDGE_SHEET_ID)를 사용한다 — 같은 문서의 다른 탭이 아니라 완전히 다른
         Spreadsheet 문서에 연동하기 위함이다. 서비스 계정 키는 두 연동이 같은 값을 공유한다.
         """
         service_account_file = os.environ.get("GOOGLE_SERVICE_ACCOUNT_FILE")
-        sheet_id = os.environ.get("GOOGLE_CANDIDATE_SHEET_ID")
+        sheet_id = os.environ.get("GOOGLE_JUDGE_SHEET_ID")
         worksheet_name = os.environ.get(
-            "GOOGLE_CANDIDATE_WORKSHEET_NAME", DEFAULT_CANDIDATE_WORKSHEET_NAME
+            "GOOGLE_JUDGE_WORKSHEET_NAME", DEFAULT_JUDGE_WORKSHEET_NAME
         )
 
         missing = [
             name
             for name, value in [
                 ("GOOGLE_SERVICE_ACCOUNT_FILE", service_account_file),
-                ("GOOGLE_CANDIDATE_SHEET_ID", sheet_id),
+                ("GOOGLE_JUDGE_SHEET_ID", sheet_id),
             ]
             if not value
         ]
@@ -177,7 +177,7 @@ class SheetsConfig:
 def _open_worksheet(config: SheetsConfig, worksheet_name: str | None = None):
     """gspread 클라이언트로 대상 워크시트를 연다. 실제 네트워크/인증 호출이 발생하는 지점.
 
-    worksheet_name을 지정하지 않으면 config.worksheet_name(TC 워크시트)을 연다. Candidate
+    worksheet_name을 지정하지 않으면 config.worksheet_name(TC 워크시트)을 연다. Judge
     워크시트 등 다른 탭을 열 때는 worksheet_name을 명시적으로 넘긴다.
     """
     try:
@@ -209,8 +209,8 @@ def _open_worksheet(config: SheetsConfig, worksheet_name: str | None = None):
     except gspread.exceptions.WorksheetNotFound as exc:
         raise SheetsSyncError(
             f"워크시트 '{name}'을(를) 찾을 수 없습니다. "
-            "GOOGLE_WORKSHEET_NAME/GOOGLE_CANDIDATE_WORKSHEET_NAME 환경변수 또는 실제 시트 탭 "
-            "이름을 확인하세요. Candidate 워크시트가 아직 없다면 candidate-create-worksheet "
+            "GOOGLE_WORKSHEET_NAME/GOOGLE_JUDGE_WORKSHEET_NAME 환경변수 또는 실제 시트 탭 "
+            "이름을 확인하세요. Judge 워크시트가 아직 없다면 judge-create-worksheet "
             "명령으로 먼저 생성해야 합니다."
         ) from exc
 
@@ -231,7 +231,7 @@ def _ensure_header(worksheet, columns: list[str] = TC_COLUMNS) -> None:
         raise SheetsSyncError(
             "시트의 헤더 컬럼이 기대값과 다릅니다. "
             f"시트 헤더: {first_row} / 기대값: {columns}. "
-            "컬럼 구성이 다른 시트에는 자동으로 쓰지 않습니다 — 시트 또는 컬럼 정의를 먼저 맞추세요."
+            "컬럼 구성이 다른 시트에는 자동으로 쓰지 않습니다 - 시트 또는 컬럼 정의를 먼저 맞추세요."
         )
 
 
@@ -290,8 +290,8 @@ def create_worksheet(
 ) -> str:
     """새 워크시트(탭)를 생성하고 헤더 행을 columns로 채운다.
 
-    worksheet_name을 지정하지 않으면 config.worksheet_name(TC 워크시트)을 생성한다. Candidate
-    워크시트를 생성할 때는 worksheet_name과 columns(CANDIDATE_COLUMNS)를 명시적으로 넘긴다.
+    worksheet_name을 지정하지 않으면 config.worksheet_name(TC 워크시트)을 생성한다. Judge
+    워크시트를 생성할 때는 worksheet_name과 columns(JUDGE_COLUMNS)를 명시적으로 넘긴다.
 
     - 이미 동일한 이름의 탭이 존재하면 실수로 인한 중복 생성을 막기 위해 에러로 중단한다
       (기존 탭을 임의로 재사용/덮어쓰지 않기 위함).
@@ -425,11 +425,11 @@ def append_tcs_from_markdown(
     return new_rows
 
 
-def _parse_candidate_markdown_table(markdown_text: str) -> list[dict]:
-    """Candidate 문서("## AI 평가 결과" 표)를 파싱해 CANDIDATE_AI_COLUMNS 순서의 dict 리스트로
+def _parse_judge_markdown_table(markdown_text: str) -> list[dict]:
+    """Judge 문서("## AI 평가 결과" 표)를 파싱해 JUDGE_AI_COLUMNS 순서의 dict 리스트로
     반환한다.
 
-    QA Decision / QA Comment 표(사용자 작성 영역)는 헤더가 CANDIDATE_AI_COLUMNS와 다르므로 이
+    QA Decision / QA Comment 표(사용자 작성 영역)는 헤더가 JUDGE_AI_COLUMNS와 다르므로 이
     함수가 찾는 대상이 아니다 — AI 작성 영역만 이 함수로 파싱하고 Sheet로 올린다.
     """
 
@@ -444,13 +444,13 @@ def _parse_candidate_markdown_table(markdown_text: str) -> list[dict]:
     header_idxs = [
         idx
         for idx, line in enumerate(lines)
-        if line.strip().startswith("|") and split_row(line) == CANDIDATE_AI_COLUMNS
+        if line.strip().startswith("|") and split_row(line) == JUDGE_AI_COLUMNS
     ]
 
     if not header_idxs:
         raise SheetsSyncError(
-            "입력 파일에서 AI 평가 결과 표(헤더가 CANDIDATE_AI_COLUMNS와 일치하는 표)를 찾을 수 "
-            f"없습니다.\n기대하는 헤더: {CANDIDATE_AI_COLUMNS}"
+            "입력 파일에서 AI 평가 결과 표(헤더가 JUDGE_AI_COLUMNS와 일치하는 표)를 찾을 수 "
+            f"없습니다.\n기대하는 헤더: {JUDGE_AI_COLUMNS}"
         )
 
     rows = []
@@ -459,44 +459,44 @@ def _parse_candidate_markdown_table(markdown_text: str) -> list[dict]:
             if not line.strip().startswith("|"):
                 break
             cells = split_row(line)
-            if len(cells) != len(CANDIDATE_AI_COLUMNS):
+            if len(cells) != len(JUDGE_AI_COLUMNS):
                 raise SheetsSyncError(f"컬럼 개수가 맞지 않는 행이 있습니다: {line}")
             cells = [unescape_cell(cell) for cell in cells]
-            rows.append(dict(zip(CANDIDATE_AI_COLUMNS, cells)))
+            rows.append(dict(zip(JUDGE_AI_COLUMNS, cells)))
     return rows
 
 
-def list_candidates(config: SheetsConfig, worksheet_name: str | None = None) -> list[dict]:
-    """Candidate 워크시트 전체(AI 작성 영역 + 사용자 작성 영역 QA Decision/QA Comment)를 조회한다.
+def list_judge_records(config: SheetsConfig, worksheet_name: str | None = None) -> list[dict]:
+    """Judge 워크시트 전체(AI 작성 영역 + 사용자 작성 영역 QA Decision/QA Comment)를 조회한다.
 
     사용자가 Sheet에 입력한 QA Decision/QA Comment를 다시 읽어오거나(사용자 QA Decision 입력
     반영), 자동화 대상 확정 전 Validation을 위해 최신 상태를 재조회하는 용도로 사용한다.
     """
     worksheet = _open_worksheet(config, worksheet_name=worksheet_name)
-    _ensure_header(worksheet, columns=CANDIDATE_COLUMNS)
-    return worksheet.get_all_records(expected_headers=CANDIDATE_COLUMNS)
+    _ensure_header(worksheet, columns=JUDGE_COLUMNS)
+    return worksheet.get_all_records(expected_headers=JUDGE_COLUMNS)
 
 
-def sync_candidates_from_markdown(
+def sync_judge_from_markdown(
     config: SheetsConfig,
     input_path: str,
     worksheet_name: str | None = None,
     dry_run: bool = False,
 ) -> dict:
-    """Candidate 문서의 AI 작성 영역만 Sheet에 반영한다(append 또는 AI 컬럼만 update).
+    """Judge 문서의 AI 작성 영역만 Sheet에 반영한다(append 또는 AI 컬럼만 update).
 
     - 시트에 없는 TC ID는 새 행으로 추가하고, QA Decision/QA Comment는 빈 값으로 둔다(사용자가
       나중에 입력).
-    - 시트에 이미 있는 TC ID는 AI 작성 컬럼(1~len(CANDIDATE_AI_COLUMNS)) 범위만 덮어쓴다. 이
+    - 시트에 이미 있는 TC ID는 AI 작성 컬럼(1~len(JUDGE_AI_COLUMNS)) 범위만 덮어쓴다. 이
       범위를 벗어난 QA Decision/QA Comment 셀은 절대 읽지도 쓰지도 않는다 — 재평가로 AI 점수가
       바뀌어도 사용자가 이미 입력한 결정/코멘트는 그대로 보존된다.
     """
     with open(input_path, encoding="utf-8") as f:
         markdown_text = f.read()
 
-    new_rows = _parse_candidate_markdown_table(markdown_text)
+    new_rows = _parse_judge_markdown_table(markdown_text)
     if not new_rows:
-        raise SheetsSyncError("동기화할 Candidate 평가 결과가 없습니다 (표에 데이터 행이 없음).")
+        raise SheetsSyncError("동기화할 Judge 평가 결과가 없습니다 (표에 데이터 행이 없음).")
 
     seen_ids: dict[str, int] = {}
     for row in new_rows:
@@ -508,7 +508,7 @@ def sync_candidates_from_markdown(
         )
 
     worksheet = _open_worksheet(config, worksheet_name=worksheet_name)
-    _ensure_header(worksheet, columns=CANDIDATE_COLUMNS)
+    _ensure_header(worksheet, columns=JUDGE_COLUMNS)
 
     existing_values = worksheet.get_all_values()
     # 1행은 헤더이므로 2행부터 실제 데이터. TC ID(1번 컬럼) -> 시트 행 번호(1-based) 매핑.
@@ -523,10 +523,10 @@ def sync_candidates_from_markdown(
     updates: list[tuple[int, list[str]]] = []
     appends: list[list[str]] = []
 
-    last_col_letter = _colnum_to_letter(len(CANDIDATE_AI_COLUMNS))
+    last_col_letter = _colnum_to_letter(len(JUDGE_AI_COLUMNS))
     for row in new_rows:
         tc_id = row["TC ID"]
-        ai_values = [row[col] for col in CANDIDATE_AI_COLUMNS]
+        ai_values = [row[col] for col in JUDGE_AI_COLUMNS]
         if tc_id in existing_row_idx:
             updates.append((existing_row_idx[tc_id], ai_values))
             updated.append(tc_id)
@@ -553,7 +553,7 @@ def _cmd_list(args: argparse.Namespace) -> None:
     config = SheetsConfig.from_env()
     records = list_existing_tcs(config)
     if not records:
-        print("(기존 TC 없음 — 시트가 비어있거나 헤더만 존재합니다)")
+        print("(기존 TC 없음 - 시트가 비어있거나 헤더만 존재합니다)")
         return
     for row in records:
         print(" | ".join(str(row.get(col, "")) for col in TC_COLUMNS))
@@ -581,12 +581,12 @@ def _apply_qa_decision_validation(worksheet) -> bool:
 
     gspread 버전에 따라 add_validation을 지원하지 않거나 API 호출이 실패할 수 있으므로
     best-effort로 동작한다 — 실패해도 워크시트 생성 자체는 계속 진행하며, 이 함수는 성공 여부만
-    bool로 반환한다(성공하지 않아도 automation-candidate-agent의 Validation이 최종 방어선이다).
+    bool로 반환한다(성공하지 않아도 automation-judge-agent의 Validation이 최종 방어선이다).
     """
     try:
         from gspread.utils import ValidationConditionType
 
-        qa_decision_col = CANDIDATE_COLUMNS.index("QA Decision") + 1
+        qa_decision_col = JUDGE_COLUMNS.index("QA Decision") + 1
         col_letter = _colnum_to_letter(qa_decision_col)
         worksheet.add_validation(
             f"{col_letter}2:{col_letter}{worksheet.row_count}",
@@ -600,13 +600,13 @@ def _apply_qa_decision_validation(worksheet) -> bool:
         return False
 
 
-def _cmd_candidate_create_worksheet(args: argparse.Namespace) -> None:
-    config = SheetsConfig.from_candidate_env()
+def _cmd_judge_create_worksheet(args: argparse.Namespace) -> None:
+    config = SheetsConfig.from_judge_env()
     result_name = create_worksheet(
-        config, columns=CANDIDATE_COLUMNS, dry_run=args.dry_run
+        config, columns=JUDGE_COLUMNS, dry_run=args.dry_run
     )
     action = "미리보기 (--dry-run, 실제로 생성하지 않음)" if args.dry_run else "생성 완료"
-    print(f"[{action}] Candidate 워크시트 '{result_name}' (헤더: {CANDIDATE_COLUMNS})")
+    print(f"[{action}] Judge 워크시트 '{result_name}' (헤더: {JUDGE_COLUMNS})")
     if not args.dry_run:
         worksheet = _open_worksheet(config, worksheet_name=result_name)
         if _apply_qa_decision_validation(worksheet):
@@ -622,9 +622,9 @@ def _cmd_candidate_create_worksheet(args: argparse.Namespace) -> None:
             )
 
 
-def _cmd_candidate_sync(args: argparse.Namespace) -> None:
-    config = SheetsConfig.from_candidate_env()
-    result = sync_candidates_from_markdown(config, args.input, dry_run=args.dry_run)
+def _cmd_judge_sync(args: argparse.Namespace) -> None:
+    config = SheetsConfig.from_judge_env()
+    result = sync_judge_from_markdown(config, args.input, dry_run=args.dry_run)
     action = "미리보기 (--dry-run, 실제로 쓰지 않음)" if args.dry_run else "동기화 완료"
     print(
         f"[{action}] 신규 추가 {len(result['appended'])}건, "
@@ -636,14 +636,14 @@ def _cmd_candidate_sync(args: argparse.Namespace) -> None:
         print("  AI 컬럼 갱신: " + ", ".join(result["updated"]))
 
 
-def _cmd_candidate_list(args: argparse.Namespace) -> None:
-    config = SheetsConfig.from_candidate_env()
-    records = list_candidates(config)
+def _cmd_judge_list(args: argparse.Namespace) -> None:
+    config = SheetsConfig.from_judge_env()
+    records = list_judge_records(config)
     if not records:
-        print("(Candidate 워크시트에 데이터 없음)")
+        print("(Judge 워크시트에 데이터 없음)")
         return
     for row in records:
-        print(" | ".join(str(row.get(col, "")) for col in CANDIDATE_COLUMNS))
+        print(" | ".join(str(row.get(col, "")) for col in JUDGE_COLUMNS))
     print(f"\n총 {len(records)}건")
 
 
@@ -699,37 +699,37 @@ def main() -> None:
     )
     append_parser.set_defaults(func=_cmd_append)
 
-    candidate_create_ws_parser = subparsers.add_parser(
-        "candidate-create-worksheet",
-        help="GOOGLE_CANDIDATE_SHEET_ID 문서에 GOOGLE_CANDIDATE_WORKSHEET_NAME 워크시트를 "
+    judge_create_ws_parser = subparsers.add_parser(
+        "judge-create-worksheet",
+        help="GOOGLE_JUDGE_SHEET_ID 문서에 GOOGLE_JUDGE_WORKSHEET_NAME 워크시트를 "
         "생성하고 헤더 행(AI 작성 컬럼 + QA Decision/QA Comment)을 기록",
     )
-    candidate_create_ws_parser.add_argument(
+    judge_create_ws_parser.add_argument(
         "--dry-run",
         action="store_true",
         help="실제로 생성하지 않고 어떤 이름으로 생성될지만 확인",
     )
-    candidate_create_ws_parser.set_defaults(func=_cmd_candidate_create_worksheet)
+    judge_create_ws_parser.set_defaults(func=_cmd_judge_create_worksheet)
 
-    candidate_sync_parser = subparsers.add_parser(
-        "candidate-sync",
-        help="Candidate 문서의 AI 작성 영역만 Sheet에 동기화 (QA Decision/QA Comment는 보존)",
+    judge_sync_parser = subparsers.add_parser(
+        "judge-sync",
+        help="Judge 문서의 AI 작성 영역만 Sheet에 동기화 (QA Decision/QA Comment는 보존)",
     )
-    candidate_sync_parser.add_argument(
-        "--input", required=True, help="Candidate 평가 결과 마크다운 파일 경로"
+    judge_sync_parser.add_argument(
+        "--input", required=True, help="Judge 평가 결과 마크다운 파일 경로"
     )
-    candidate_sync_parser.add_argument(
+    judge_sync_parser.add_argument(
         "--dry-run",
         action="store_true",
         help="실제로 쓰지 않고 신규 추가/갱신 대상만 미리 확인",
     )
-    candidate_sync_parser.set_defaults(func=_cmd_candidate_sync)
+    judge_sync_parser.set_defaults(func=_cmd_judge_sync)
 
-    candidate_list_parser = subparsers.add_parser(
-        "candidate-list",
-        help="Candidate 워크시트 전체 조회 (QA Decision/QA Comment 포함)",
+    judge_list_parser = subparsers.add_parser(
+        "judge-list",
+        help="Judge 워크시트 전체 조회 (QA Decision/QA Comment 포함)",
     )
-    candidate_list_parser.set_defaults(func=_cmd_candidate_list)
+    judge_list_parser.set_defaults(func=_cmd_judge_list)
 
     args = parser.parse_args()
     try:

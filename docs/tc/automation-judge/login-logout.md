@@ -1,21 +1,21 @@
 ---
-문서유형: Automation Candidate Evaluation
+문서유형: Automation Judge Evaluation
 상태: 자동화대상확정
 대상 TC 문서: docs/tc/login-logout.md
 대상 TC 문서 최근 변경일(평가 시점 기준): 2026-08-22
 관련 Feature PRD: feature/login-logout.md
-Google Sheet 워크시트: Automation Candidates
+Google Sheet 워크시트: Automation Judge
 최초 작성일: 2026-08-23
 최근 변경일: 2026-08-24
 최근 Sheet 동기화일: 2026-08-23
 확정일: 2026-08-24
 ---
 
-# Automation Candidate 평가 - 로그인/로그아웃
+# Automation Judge 평가 - 로그인/로그아웃
 
 ## AI 평가 결과 (AI 작성 영역 — Google Sheet와 동기화됨)
 
-| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Candidate (AI) | 선정/제외 사유 |
+| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Judge (AI) | 선정/제외 사유 |
 |---|---|---|---|---|---|---|---|---|---|
 | TC-LOGIN-LOGOUT-001 | 2 | 3 | 5 | 5 | 1 | 1 | 21 | Hold | 단순 UI 레이아웃 노출 확인(Skill 4.2 후순위 신호)으로 Business Criticality가 낮음(2). Result Determinism/Automation Stability는 높고 자동화 비용도 매우 낮아 Score는 21(후보 구간)이나, 비즈니스 영향이 낮아 자동화 ROI가 애매함 — 사용자 검토 필요. |
 | TC-LOGIN-LOGOUT-002 | 5 | 5 | 5 | 5 | 1 | 1 | 26 | Yes | 로그인 기능 진입점(핵심 Flow)이며 매 Release 반복 검증되는 안정적 네비게이션 클릭 동작. 6개 축 모두 우수해 자동화 적극 권장. |
@@ -32,7 +32,7 @@ Google Sheet 워크시트: Automation Candidates
 | TC-LOGIN-LOGOUT-013 | 2 | 2 | 4 | 5 | 2 | 1 | 20 | Yes | 긴 문자열/특수문자 입력 시 별도 클라이언트 제한이 없음을 확인하는 경계값 Negative Case. 에러 메시지로 deterministic 판정 가능하고 자동화/유지비용이 매우 낮아 기존 로그인 Negative Case 자동화 스위트에 낮은 추가비용으로 포함 가능. |
 | TC-LOGIN-LOGOUT-014 | 5 | 5 | 5 | 5 | 2 | 2 | 26 | Yes | 로그아웃 핵심 동작(상단 메뉴 클릭). 실패 시 세션이 종료되지 않아 보안 영향이 있으며 매 Release 반복 검증되는 핵심 회귀. |
 | TC-LOGIN-LOGOUT-015 | 5 | 4 | 5 | 5 | 2 | 2 | 25 | Yes | TC-014와 달리 URL 직접 접근이라는 별도 진입 경로로 로그아웃을 검증(별도 Risk Coverage, 중복 아님). |
-| TC-LOGIN-LOGOUT-016 | 5 | 2 | 1 | 5 | 1 | 5 | 15 | No | [Hard Rule 적용] 현재 발생 중인 결함(로그아웃 상태에서 `/logout` 접근 시 Django 서버 에러 페이지 노출 — KeyError, Traceback 등 디버그 정보 노출)을 정상 Expected Result처럼 고정한 TC. Skill 5절 Hard Rule에 따라 점수(참고 15)와 무관하게 Candidate: No로 처리. 결함이 수정되고 TC/PRD가 정상 요구사항으로 재승인되면 재평가 가능. |
+| TC-LOGIN-LOGOUT-016 | 5 | 2 | 1 | 5 | 1 | 5 | 15 | No | [Hard Rule 적용] 현재 발생 중인 결함(로그아웃 상태에서 `/logout` 접근 시 Django 서버 에러 페이지 노출 — KeyError, Traceback 등 디버그 정보 노출)을 정상 Expected Result처럼 고정한 TC. Skill 5절 Hard Rule에 따라 점수(참고 15)와 무관하게 Judge: No로 처리. 결함이 수정되고 TC/PRD가 정상 요구사항으로 재승인되면 재평가 가능. |
 
 ## QA Decision (Google Sheet에서 동기화됨 — 사용자 작성 영역, AI는 수정하지 않음)
 
@@ -64,8 +64,8 @@ Google Sheet 워크시트: Automation Candidates
 - **TC-LOGIN-LOGOUT-016**: `docs/tc/login-logout.md`의 "결함 의심 항목" 섹션에 포함된 TC로,
   현재 발생 중인 결함(로그아웃 상태에서 `/logout` 직접 접근 시 Django 서버 에러 페이지가
   KeyError/Traceback 등 디버그 정보와 함께 그대로 노출됨)을 정상 Expected Result로 고정하고
-  있습니다. `automation-candidate` Skill 5절 Hard Rule에 따라 Automation Score와 무관하게
-  Candidate: No로 처리했습니다. 이 결함이 수정되고 TC/PRD가 정상 동작 기준으로 재승인되면
+  있습니다. `automation-judge` Skill 5절 Hard Rule에 따라 Automation Score와 무관하게
+  Judge: No로 처리했습니다. 이 결함이 수정되고 TC/PRD가 정상 동작 기준으로 재승인되면
   다시 일반 TC로 재평가할 수 있습니다.
 - 2026-08-24 Sheet 재조회 및 확정 전 Validation 결과(사전 점검, 아직 최종 확정 처리는
   수행하지 않음):
@@ -106,6 +106,6 @@ Google Sheet 워크시트: Automation Candidates
 
 | 날짜 | 변경 사유 | 상태 |
 |---|---|---|
-| 2026-08-23 | 승인완료 상태의 `docs/tc/login-logout.md`(TC-LOGIN-LOGOUT-001~016) 최초 1차 자동화 후보 평가. Feature PRD(`docs/prd/feature/login-logout.md`, 승인완료)를 맥락 참고. TC-016은 Hard Rule 적용으로 Candidate: No. | 평가중 |
-| 2026-08-24 | Google Sheet(Automation Candidates 워크시트) 최초 재조회. QA Decision 16건 전부 입력 완료(Approved 11 / Rejected 5 / Hold 0, 미검토 0). 확정 전 Validation(TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부) 4개 항목 모두 통과. 사용자의 명시적 "자동화 대상 확정" 요청 전이므로 상태는 자동확정 처리하지 않고 사용자검토완료로 전환. | 사용자검토완료 |
+| 2026-08-23 | 승인완료 상태의 `docs/tc/login-logout.md`(TC-LOGIN-LOGOUT-001~016) 최초 1차 자동화 후보 평가. Feature PRD(`docs/prd/feature/login-logout.md`, 승인완료)를 맥락 참고. TC-016은 Hard Rule 적용으로 Judge: No. | 평가중 |
+| 2026-08-24 | Google Sheet(Automation Judge 워크시트) 최초 재조회. QA Decision 16건 전부 입력 완료(Approved 11 / Rejected 5 / Hold 0, 미검토 0). 확정 전 Validation(TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부) 4개 항목 모두 통과. 사용자의 명시적 "자동화 대상 확정" 요청 전이므로 상태는 자동확정 처리하지 않고 사용자검토완료로 전환. | 사용자검토완료 |
 | 2026-08-24 | 사용자가 채팅에서 직접 "네, 확정해줘"라고 명시적으로 확정 요청. Approved 11건(TC-001,002,003,004,005,006,010,011,013,014,015)을 최종 자동화 대상으로 확정하고 Rejected 5건(TC-007,008,009,012,016)은 자동화 제외로 확정. | 자동화대상확정 |

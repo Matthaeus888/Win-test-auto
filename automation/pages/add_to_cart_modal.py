@@ -7,7 +7,7 @@ Source of Truth:
 
 이 모달은 Home(`/`)/Products(`/products`) 목록 페이지의 상품 카드는 물론, 상품 상세 페이지
 (`/product_details/{id}`)의 "Add to cart" 버튼 클릭 시에도 동일하게 노출되는 공유 컴포넌트다
-(REQ-CART-001이 원 정의이며 `product-detail.md`가 재사용한다고 PRD/Candidate 문서에 명시됨,
+(REQ-CART-001이 원 정의이며 `product-detail.md`가 재사용한다고 PRD/Judge 문서에 명시됨,
 ROADMAP.md Phase 5/6 근거). 이에 따라 특정 화면에 종속되지 않는 별도 Page Object로 분리했으며,
 Phase 6(product-detail)에서도 신규 정의 없이 그대로 재사용한다(ROADMAP.md Phase 6 항목).
 

@@ -33,16 +33,16 @@ PRD/TC를 기준으로 하고, **코드 작성 방식(구조/컨벤션/원칙)�
 ### 0.1 자동화 대상 범위
 
 이 문서가 정의하는 규칙이 적용되는 자동화 대상은 다음 조건을 **모두** 만족하는 TC로 한정합니다
-(`automation-candidate-agent`가 정의한 조건과 동일).
+(`automation-judge-agent`가 정의한 조건과 동일).
 
 ```
-Candidate 문서(docs/tc/automation-candidates/{slug}.md) 상태 = 자동화대상확정
+Judge 문서(docs/tc/automation-judge/{slug}.md) 상태 = 자동화대상확정
 AND
 QA Decision = Approved
 ```
 
 2026-08-27 기준 대상 Feature와 Approved TC 건수는 다음과 같습니다(상세 TC 목록은 각
-Candidate 문서를 Source of Truth로 참조하며, 이 문서에 전체 TC를 복제하지 않습니다).
+Judge 문서를 Source of Truth로 참조하며, 이 문서에 전체 TC를 복제하지 않습니다).
 
 | Feature | Approved TC 수 |
 |---|---|

@@ -38,14 +38,15 @@
 |---|---|
 | 워크플로우 전체 원칙, 승인 게이트, Git/Slack/Secret 운영 원칙 | `CLAUDE.md` (저장소 루트) |
 | TC 작성 품질 기준·컬럼 정의·Priority 산정·Naming Rule | `.claude/skills/tc-writing/SKILL.md` |
-| 자동화 대상 선정 평가 기준(Automation Score, Hard Rule 등) | `.claude/skills/automation-candidate/SKILL.md` |
+| 자동화 대상 선정 평가 기준(Automation Score, Hard Rule 등) | `.claude/skills/automation-judge/SKILL.md` |
 | 자동화 코드 작성 방식(언어/구조/Locator/Wait/Naming/CI 등) | `docs/automation/AUTOMATION_GUIDE.md` |
 | 요구사항(Feature 단위) | `docs/prd/feature/{slug}.md` (승인된 것만) |
 | 프로젝트 전체 요구사항/대상 서비스 정보 | `docs/prd/project-prd.md` |
 | Test Scenario | `docs/tc/{slug}.md` (승인된 것만) |
-| 자동화 대상 확정 여부/Approved TC 목록 | `docs/tc/automation-candidates/{slug}.md` |
+| 자동화 대상 확정 여부/Approved TC 목록 | `docs/tc/automation-judge/{slug}.md` |
 | 자동화 구현 순서/Phase 범위 | `docs/roadmap/ROADMAP.md` (승인된 것만) |
 | Google Sheets 연동 방법/제약 | `scripts/sheets_sync/sheets_sync.py` 상단 docstring, `scripts/sheets_sync/README.md` |
+| Google Docs 연동 방법/제약 (PRD/Roadmap) | `scripts/docs_sync/docs_sync.py` 상단 docstring, `scripts/docs_sync/README.md` |
 | 로컬(Windows) 실행 환경/MCP/Git/CI Secret 세팅 절차 | `docs/setup/WINDOWS_SETUP.md`, `scripts/setup/README.md` |
 | 각 Agent의 담당 범위/워크플로우 | 해당 Agent 정의 파일(`.claude/agents/**/*.md`) |
 
@@ -62,13 +63,14 @@
 docs/prd/project-prd.md
 docs/prd/feature/{slug}.md
 docs/tc/{slug}.md
-docs/tc/automation-candidates/{slug}.md
+docs/tc/automation-judge/{slug}.md
 docs/roadmap/ROADMAP.md
 docs/automation/AUTOMATION_GUIDE.md
-.claude/agents/{prd-agent, tc-agent, automation-candidate-agent}.md   # 산출물 작성 계열
+.claude/agents/{prd-agent, tc-agent, automation-judge-agent}.md   # 산출물 작성 계열
 .claude/agents/dev/{roadmap-agent, automation-developer-agent}.md    # 개발 계열
-.claude/skills/{tc-writing, automation-candidate}/SKILL.md
+.claude/skills/{tc-writing, automation-judge}/SKILL.md
 scripts/sheets_sync/sheets_sync.py
+scripts/docs_sync/docs_sync.py
 scripts/notify_slack/notify.py
 scripts/setup/*.ps1                                                   # 로컬(Windows) 실행 환경 세팅 스크립트
 docs/setup/WINDOWS_SETUP.md                                           # 로컬 환경 세팅 절차
@@ -89,6 +91,10 @@ shrimp_data/                                                          # shrimp-t
 - Google Sheets 연동이 필요한 새 기능은 `scripts/sheets_sync/sheets_sync.py`를 확장하거나
   호출하는 방식으로 구현한다. Agent/Skill이 Google Sheets API를 직접 호출하는 별도 경로를
   새로 만들지 않는다.
+- Google Docs 연동(PRD/Roadmap 등 서술형 문서)이 필요한 새 기능은 `scripts/docs_sync/docs_sync.py`
+  를 확장하거나 호출하는 방식으로 구현한다. Agent/Skill이 Google Docs API를 직접 호출하는
+  별도 경로를 새로 만들지 않는다. 표 형태 데이터(TC/Judge)와 서술형 문서(PRD/Roadmap)는
+  각각 `sheets_sync`/`docs_sync`로 모듈이 분리되어 있으므로 서로 섞어 쓰지 않는다.
 - `.github/workflows/ci.yml`(CI)은 이미 생성되어 있다. CLAUDE.md 15절/AUTOMATION_GUIDE.md
   16절에 정의된 CI 운영 흐름(Push → Actions → 테스트 실행 → Report → 판정 → Slack)을 벗어나는
   변경이 필요하면 사용자 확인을 받은 뒤 반영한다.
@@ -102,8 +108,8 @@ shrimp_data/                                                          # shrimp-t
   아래.
 - 특정 산출물의 "작성 규칙/평가 기준"(워크플로우가 아닌 판단 기준)을 재사용 가능하게 분리해야
   하면 Agent 정의에 직접 쓰지 않고 `.claude/skills/{skill-name}/SKILL.md`로 분리한 뒤 Agent가
-  이를 Read해서 따르게 한다(`tc-agent` + `tc-writing`, `automation-candidate-agent` +
-  `automation-candidate` 패턴을 따른다).
+  이를 Read해서 따르게 한다(`tc-agent` + `tc-writing`, `automation-judge-agent` +
+  `automation-judge` 패턴을 따른다).
 - 새 Agent 정의 파일은 다음을 반드시 포함한다: frontmatter(`name`, `description`, `model`,
   `tools`), 담당 범위가 아닌 것(다른 Agent 책임)을 명시하는 절, 사용하는 Skill/Guide가 있으면
   "자체 정의하지 않고 Read해서 따른다"는 명시적 문장.
@@ -140,11 +146,11 @@ shrimp_data/                                                          # shrimp-t
 
 ## 6. 절대 하지 말아야 할 것 (프로젝트 관찰 사실 기반)
 
-- `상태: 승인완료`로 표시된 문서(PRD/TC/Roadmap/Candidate 문서)를 후속 작업에서 임의로 수정하지
+- `상태: 승인완료`로 표시된 문서(PRD/TC/Roadmap/Judge 문서)를 후속 작업에서 임의로 수정하지
   않는다. 수정이 필요하면 사유·영향을 사용자에게 보고하고 재승인 후에만 반영한다.
 - `scripts/sheets_sync/sheets_sync.py`의 TC 시트 대상으로 update/delete를 새로 구현하지
   않는다(append/list만 제공하도록 설계된 의도적 제약).
-- `scripts/sheets_sync/sheets_sync.py`의 Candidate 시트에서 `QA Decision`, `QA Comment`
+- `scripts/sheets_sync/sheets_sync.py`의 Judge 시트에서 `QA Decision`, `QA Comment`
   컬럼에 쓰기 동작을 추가하지 않는다(사용자 작성 전용, AI는 읽기만 가능).
 - Slack 연동을 Commit/Push 등 승인 용도로 사용하지 않는다(CI 결과 알림 전용,
   `CLAUDE.md` 16절).

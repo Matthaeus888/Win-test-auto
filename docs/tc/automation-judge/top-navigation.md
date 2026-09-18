@@ -1,21 +1,21 @@
 ---
-문서유형: Automation Candidate Evaluation
+문서유형: Automation Judge Evaluation
 상태: 자동화대상확정   # 평가중 | 사용자검토완료 | 자동화대상확정
 대상 TC 문서: docs/tc/top-navigation.md
 대상 TC 문서 최근 변경일(평가 시점 기준): 2026-08-22
 관련 Feature PRD: feature/top-navigation.md
-Google Sheet 워크시트: Automation Candidates
+Google Sheet 워크시트: Automation Judge
 최초 작성일: 2026-08-24
 최근 변경일: 2026-08-27
 최근 Sheet 동기화일: 2026-08-24
 확정일: 2026-08-27
 ---
 
-# Automation Candidate 평가 - 상단 네비게이션
+# Automation Judge 평가 - 상단 네비게이션
 
 ## AI 평가 결과 (AI 작성 영역 — Google Sheet와 동기화됨)
 
-| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Candidate (AI) | 선정/제외 사유 |
+| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Judge (AI) | 선정/제외 사유 |
 |---|---|---|---|---|---|---|---|---|---|
 | TC-TOP-NAVIGATION-001 | 2 | 3 | 5 | 5 | 2 | 1 | 22 | Hold | Home 메뉴 이동은 브라우저 뒤로가기/URL 직접 입력 등 대체 수단이 있고 로그인/로그아웃 직후 자동 랜딩되는 경우가 많아 실패 영향이 제한적(BC2). 단순 정적 링크로 안정성/판정/유지비용은 모두 우수해 Score는 22(후보 구간)이나 비즈니스 영향이 낮아 ROI 판단을 위해 사용자 검토 필요. |
 | TC-TOP-NAVIGATION-002 | 4 | 4 | 5 | 5 | 2 | 1 | 25 | Yes | 전체 상품 목록으로 이동하는 핵심 진입 경로로 PRD상 대체 경로가 제한적이라 실패 시 상품 탐색 자체가 어려워짐(BC4). 안정적인 정적 링크로 결정적 판정과 낮은 유지비용을 가져 자동화 적극 권장. |
@@ -47,7 +47,7 @@ Google Sheet 워크시트: Automation Candidates
 
 > 이 표는 Google Sheet의 QA Decision/QA Comment 컬럼을 그대로 옮겨온 참고용 스냅샷입니다.
 > 실제 값의 Source of Truth는 항상 Google Sheet이며, 이 문서를 직접 수정해도 Sheet에는
-> 반영되지 않습니다. 2026-08-27 재조회(candidate-list) 결과 TC-TOP-NAVIGATION-001~011 전체
+> 반영되지 않습니다. 2026-08-27 재조회(judge-list) 결과 TC-TOP-NAVIGATION-001~011 전체
 > QA Decision이 입력 완료되었음을 확인했습니다(Approved 6건, Rejected 5건, Hold 0건, 미검토
 > 0건 — 가공/재해석 없이 Sheet 값 그대로 반영). QA Comment는 전 항목 공란입니다.
 
@@ -79,7 +79,7 @@ Google Sheet 워크시트: Automation Candidates
     설계 단계에서 적절히 처리되어 있어 평가 대상에서 자연스럽게 제외되어 있었습니다.
 - 단순 시각적 스타일/노출 확인이며 Business Criticality가 매우 낮은 TC(TC-TOP-NAVIGATION-007,
   008, 011)는 Automation Score가 후보 구간(14~19)으로 산정되었으나, Skill 1절에 따라 점수만으로
-  기계적으로 결정하지 않고 TC 목적/ROI를 함께 고려해 Candidate: No로 판정했습니다(점수 구간과
+  기계적으로 결정하지 않고 TC 목적/ROI를 함께 고려해 Judge: No로 판정했습니다(점수 구간과
   최종 판단이 다른 사유를 각 행에 명시).
 - TC-TOP-NAVIGATION-003(Cart 메뉴 이동)은 `cart.md` TC-CART-003(담기 확인 모달의 "View Cart"
   링크)이라는 별도 진입 경로가 이미 검증되어 있어 완전한 실패로 이어지지 않는다는 점이 Business
@@ -103,7 +103,7 @@ Google Sheet 워크시트: Automation Candidates
 2026-08-27 확정. QA Decision이 `Approved`인 아래 6건만 자동화 대상으로 확정합니다(Rejected
 5건은 확정하지 않음, Hold는 이번 평가에서 0건).
 
-| TC ID | Automation Score | Candidate (AI) | QA Decision |
+| TC ID | Automation Score | Judge (AI) | QA Decision |
 |---|---|---|---|
 | TC-TOP-NAVIGATION-001 | 22 | Hold | Approved |
 | TC-TOP-NAVIGATION-002 | 25 | Yes | Approved |
@@ -116,6 +116,6 @@ Google Sheet 워크시트: Automation Candidates
 
 | 날짜 | 변경 사유 | 상태 |
 |---|---|---|
-| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/top-navigation.md`, TC-TOP-NAVIGATION-001~011)를 대상으로 automation-candidate Skill 6개 축 1차 평가 수행. Feature PRD(`docs/prd/feature/top-navigation.md`, 승인완료)를 맥락 참고. Hard Rule 해당 항목 없음. Yes 3건(002, 004, 006) / Hold 5건(001, 003, 005, 009, 010) / No 3건(007, 008, 011). 사용자 요청에 따라 `page-ui.md`, `login-logout.md`와의 Cross-Feature 중복 여부를 확인했으며 신규 중복 없음(기존에 알려진 두 건은 TC 설계 단계에서 이미 처리됨)을 확인해 별도 기록. | 평가중 |
-| 2026-08-24 | Google Sheet(Automation Candidates 워크시트)에 AI 작성 영역(11건 신규 추가) 동기화 완료(dry-run 확인 후 실제 반영). 이후 QA Decision/QA Comment 재조회(candidate-list) 수행 결과 TC-TOP-NAVIGATION-001~011 전체 QA Decision이 아직 비어있음(미검토) 확인. Skill Workflow 8번에 따라 최초 재조회 수행으로 상태 전환 | 사용자검토완료 |
-| 2026-08-27 | 사용자의 명시적 "자동화 대상 확정" 요청에 따라 Google Sheet 재조회(candidate-list) 수행. TC-TOP-NAVIGATION-001~011 전체 QA Decision이 입력 완료(Approved 6건, Rejected 5건, Hold 0건, 미검토 0건)됨을 확인. TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부 Validation을 모두 통과해 Approved 6건(001~006)을 자동화 대상으로 확정. | 자동화대상확정 |
+| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/top-navigation.md`, TC-TOP-NAVIGATION-001~011)를 대상으로 automation-judge Skill 6개 축 1차 평가 수행. Feature PRD(`docs/prd/feature/top-navigation.md`, 승인완료)를 맥락 참고. Hard Rule 해당 항목 없음. Yes 3건(002, 004, 006) / Hold 5건(001, 003, 005, 009, 010) / No 3건(007, 008, 011). 사용자 요청에 따라 `page-ui.md`, `login-logout.md`와의 Cross-Feature 중복 여부를 확인했으며 신규 중복 없음(기존에 알려진 두 건은 TC 설계 단계에서 이미 처리됨)을 확인해 별도 기록. | 평가중 |
+| 2026-08-24 | Google Sheet(Automation Judge 워크시트)에 AI 작성 영역(11건 신규 추가) 동기화 완료(dry-run 확인 후 실제 반영). 이후 QA Decision/QA Comment 재조회(judge-list) 수행 결과 TC-TOP-NAVIGATION-001~011 전체 QA Decision이 아직 비어있음(미검토) 확인. Skill Workflow 8번에 따라 최초 재조회 수행으로 상태 전환 | 사용자검토완료 |
+| 2026-08-27 | 사용자의 명시적 "자동화 대상 확정" 요청에 따라 Google Sheet 재조회(judge-list) 수행. TC-TOP-NAVIGATION-001~011 전체 QA Decision이 입력 완료(Approved 6건, Rejected 5건, Hold 0건, 미검토 0건)됨을 확인. TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부 Validation을 모두 통과해 Approved 6건(001~006)을 자동화 대상으로 확정. | 자동화대상확정 |

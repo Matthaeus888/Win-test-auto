@@ -1,21 +1,21 @@
 ---
-문서유형: Automation Candidate Evaluation
+문서유형: Automation Judge Evaluation
 상태: 자동화대상확정
 대상 TC 문서: docs/tc/cart.md
 대상 TC 문서 최근 변경일(평가 시점 기준): 2026-08-22
 관련 Feature PRD: feature/cart.md
-Google Sheet 워크시트: Automation Candidates
+Google Sheet 워크시트: Automation Judge
 최초 작성일: 2026-08-24
 최근 변경일: 2026-08-24
 최근 Sheet 동기화일: 2026-08-24
 확정일: 2026-08-24
 ---
 
-# Automation Candidate 평가 - 장바구니 (상품 담기 포함)
+# Automation Judge 평가 - 장바구니 (상품 담기 포함)
 
 ## AI 평가 결과 (AI 작성 영역 — Google Sheet와 동기화됨)
 
-| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Candidate (AI) | 선정/제외 사유 |
+| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Judge (AI) | 선정/제외 사유 |
 |---|---|---|---|---|---|---|---|---|---|
 | TC-CART-001 | 4 | 5 | 4 | 5 | 1 | 1 | 24 | Yes | 담기 확인 모달은 상품이 실제로 담겼음을 알리는 유일한 피드백이자 다른 Feature에서도 재사용되는 공유 컴포넌트의 최초 검증 지점(실패해도 담기 자체는 되므로 BC는 5가 아닌 4). 매 Release 반복 검증되는 핵심 경로이며 아이콘/문구/버튼 구성을 DOM으로 결정적으로 판정 가능하고 자동화/유지 비용이 매우 낮아 자동화 적극 권장. |
 | TC-CART-002 | 2 | 3 | 5 | 5 | 1 | 1 | 21 | Hold | "Continue Shopping" 클릭 시 모달만 닫히는 단순 UX 동작으로 실패해도 페이지 이동/새로고침으로 복구 가능해 Business Criticality가 낮음(Skill 4.2 후순위 신호에 근접). 기술적으로는 자동화 비용이 매우 낮아 Score는 21(후보 구간)이나 비즈니스 영향이 낮아 ROI가 애매함 — 사용자 검토 필요. |
@@ -66,7 +66,7 @@ Google Sheet 워크시트: Automation Candidates
   Result처럼 고정한 TC)에 해당하는 항목은 없었습니다.
 - TC-CART-007/012/013(Quantity, Address Details 등 편집 불가 확인)과 TC-CART-002/003
   (모달 버튼/링크 단순 이동)은 Automation Score는 후보 구간(20~21)이나 Business
-  Criticality/Regression Frequency가 낮아 Candidate: Hold로 판정했습니다 — 자동화 자체가
+  Criticality/Regression Frequency가 낮아 Judge: Hold로 판정했습니다 — 자동화 자체가
   불가능해서가 아니라 ROI 판단을 위해 사용자 검토가 필요하다는 의미입니다.
 - 2026-08-24 Sheet 재조회 및 확정 전 Validation 결과:
   - TC ID 유효성/중복: Sheet의 16개 TC ID 모두 `docs/tc/cart.md`에 실존, 중복 없음.
@@ -105,6 +105,6 @@ Google Sheet 워크시트: Automation Candidates
 
 | 날짜 | 변경 사유 | 상태 |
 |---|---|---|
-| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/cart.md`, TC-CART-001~016)를 대상으로 automation-candidate Skill 6개 축 1차 평가 수행. Hard Rule 해당 항목 없음. Yes 11건 / Hold 5건. | 평가중 |
-| 2026-08-24 | Google Sheet(Automation Candidates 워크시트)에 AI 작성 영역(16건 신규 추가) 동기화 완료. 이후 QA Decision/QA Comment 재조회(candidate-list) 수행 결과 TC-CART-001~016 전체 QA Decision이 아직 비어있음(미검토) 확인. Skill Workflow 8번에 따라 최초 재조회 수행으로 상태 전환 | 사용자검토완료 |
+| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/cart.md`, TC-CART-001~016)를 대상으로 automation-judge Skill 6개 축 1차 평가 수행. Hard Rule 해당 항목 없음. Yes 11건 / Hold 5건. | 평가중 |
+| 2026-08-24 | Google Sheet(Automation Judge 워크시트)에 AI 작성 영역(16건 신규 추가) 동기화 완료. 이후 QA Decision/QA Comment 재조회(judge-list) 수행 결과 TC-CART-001~016 전체 QA Decision이 아직 비어있음(미검토) 확인. Skill Workflow 8번에 따라 최초 재조회 수행으로 상태 전환 | 사용자검토완료 |
 | 2026-08-24 | Google Sheet 재조회 결과 QA Decision 16건 전부 입력 완료(Approved 13 / Rejected 3 / Hold 0, 미검토 0) 확인. 확정 전 Validation(TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부) 4개 항목 모두 통과. 사용자가 채팅에서 직접 "네, 확정해줘"라고 명시적으로 확정 요청. Approved 13건을 최종 자동화 대상으로 확정하고 Rejected 3건은 자동화 제외로 확정. | 자동화대상확정 |

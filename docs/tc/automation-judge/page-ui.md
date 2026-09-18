@@ -1,21 +1,21 @@
 ---
-문서유형: Automation Candidate Evaluation
+문서유형: Automation Judge Evaluation
 상태: 자동화대상확정   # 평가중 | 사용자검토완료 | 자동화대상확정
 대상 TC 문서: docs/tc/page-ui.md
 대상 TC 문서 최근 변경일(평가 시점 기준): 2026-08-22
 관련 Feature PRD: feature/page-ui.md
-Google Sheet 워크시트: Automation Candidates
+Google Sheet 워크시트: Automation Judge
 최초 작성일: 2026-08-24
 최근 변경일: 2026-08-24
 최근 Sheet 동기화일: 2026-08-24
 확정일: 2026-08-24
 ---
 
-# Automation Candidate 평가 - 각 페이지별 UI
+# Automation Judge 평가 - 각 페이지별 UI
 
 ## AI 평가 결과 (AI 작성 영역 — Google Sheet와 동기화됨)
 
-| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Candidate (AI) | 선정/제외 사유 |
+| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Judge (AI) | 선정/제외 사유 |
 |---|---|---|---|---|---|---|---|---|---|
 | TC-PAGE-UI-001 | 2 | 3 | 4 | 5 | 2 | 2 | 20 | Hold | Home 배너 화살표/dot 노출은 실패해도 서비스 이용 자체에는 지장이 없는 장식 요소(BC 낮음)로, DOM 색상/개수로 결정적 판정이 가능하고 유지비용도 낮으나 비즈니스 영향이 낮아 ROI 판단을 위해 사용자 검토 필요. |
 | TC-PAGE-UI-002 | 2 | 3 | 4 | 4 | 2 | 3 | 18 | Hold | 배너 자동 전환은 타이머 대기가 필요해 판정 로직이 다소 복잡하고(RD4) 대기 조건 특성상 유지비용이 다소 높음(MC3). BC도 낮아 Score 18(후보 하한)이나 정성적으로 ROI가 애매해 사용자 검토 필요. |
@@ -107,7 +107,7 @@ Google Sheet 워크시트: Automation Candidates
 
 > 이 표는 Google Sheet의 QA Decision/QA Comment 컬럼을 그대로 옮겨온 참고용 스냅샷입니다.
 > 실제 값의 Source of Truth는 항상 Google Sheet이며, 이 문서를 직접 수정해도 Sheet에는
-> 반영되지 않습니다. 2026-08-24(2차) 재조회(candidate-list) 결과 TC-PAGE-UI-001~041 전체
+> 반영되지 않습니다. 2026-08-24(2차) 재조회(judge-list) 결과 TC-PAGE-UI-001~041 전체
 > QA Decision이 입력 완료됨을 확인했습니다(Approved 21 / Rejected 20 / Hold 0, 미검토 0,
 > 가공/재해석 없이 Sheet 값 그대로 옮김).
 
@@ -119,9 +119,9 @@ Google Sheet 워크시트: Automation Candidates
 - **Cross-Feature TC 중복 의심 (Skill 4.3 참고, 중요)**: TC-PAGE-UI-040(Address Details
   편집 불가 확인)과 TC-PAGE-UI-041(Review Your Order Quantity 편집 불가 확인)은 검증
   목적·Test Steps가 `docs/tc/cart.md`의 TC-CART-012, TC-CART-013과 사실상 동일합니다. 두 TC는
-  `docs/tc/automation-candidates/cart.md`에서 이미 QA Decision: Rejected로 확정되었습니다.
+  `docs/tc/automation-judge/cart.md`에서 이미 QA Decision: Rejected로 확정되었습니다.
   page-ui.md와 cart.md는 각각 독립적으로 승인된 문서이며 이 에이전트는 승인된 TC 원본을 임의로
-  수정하지 않으므로, 이 중복은 그대로 두고 평가에만 반영했습니다(Candidate: Hold, 중복 사유
+  수정하지 않으므로, 이 중복은 그대로 두고 평가에만 반영했습니다(Judge: Hold, 중복 사유
   명시). 두 TC 중 하나만 자동화 대상으로 선택하는 편이 유지보수 중복을 피할 수 있어 사용자
   판단을 요청드립니다.
 - TC-PAGE-UI-014(Products 사이드바 CATEGORY/BRANDS 노출)는 Home 페이지의 TC-004/005와
@@ -129,7 +129,7 @@ Google Sheet 워크시트: Automation Candidates
   판정했습니다(두 TC 모두 이미 BC가 낮아 실질적인 자동화 우선순위 차이는 크지 않음).
 - 단순 정적 UI 노출 확인이며 Business Criticality/Regression Frequency가 모두 매우 낮은
   TC(TC-PAGE-UI-010, 011, 016, 022, 038)는 Automation Score가 18(후보 구간 하한)로 산정되었으나,
-  Skill 1절에 따라 점수만으로 기계적으로 결정하지 않고 TC 목적/ROI를 함께 고려해 Candidate: No로
+  Skill 1절에 따라 점수만으로 기계적으로 결정하지 않고 TC 목적/ROI를 함께 고려해 Judge: No로
   판정했습니다(점수 구간과 최종 판단이 다른 사유를 각 행에 명시).
 - 2026-08-24 Sheet 재조회 및 확정 전 Validation 결과(사용자의 "page-ui 확정해줘" 요청에 따른
   확인, 최종 확정 처리는 사용자 채팅 직접 승인 이후 별도로 진행 예정):
@@ -187,7 +187,7 @@ Rejected 결정하여 두 문서 간 자동화 방향이 일관되게 정리됨)
 
 | 날짜 | 변경 사유 | 상태 |
 |---|---|---|
-| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/page-ui.md`, TC-PAGE-UI-001~041)를 대상으로 automation-candidate Skill 6개 축 1차 평가 수행. Hard Rule 해당 항목 없음. Yes 15건 / Hold 21건 / No 5건. TC-PAGE-UI-040/041과 cart.md TC-CART-012/013 간 Cross-Feature TC 중복 의심을 발견해 별도 기록. | 평가중 |
-| 2026-08-24 | Google Sheet(Automation Candidates 워크시트)에 AI 작성 영역(41건 신규 추가) 동기화 완료. 이후 QA Decision/QA Comment 재조회(candidate-list) 수행 결과 TC-PAGE-UI-001~041 전체 QA Decision이 아직 비어있음(미검토) 확인. Skill Workflow 8번에 따라 최초 재조회 수행으로 상태 전환 | 사용자검토완료 |
-| 2026-08-24 | 사용자의 "page-ui 확정해줘" 요청에 따라 Google Sheet 재조회(candidate-list) 수행 결과 QA Decision 41건 전부 입력 완료 확인(Approved 21 / Rejected 20 / Hold 0, 미검토 0). 확정 전 Validation(TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부) 4개 항목 모두 통과. TC-PAGE-UI-040/041 중복 의심 건은 사용자가 둘 다 Rejected로 결정해 cart.md TC-CART-012/013(Rejected)과 일관되게 정리됨. 최종 "자동화대상확정" 전환은 사용자의 채팅 직접 승인 대기 중이며 아직 진행하지 않음 | 사용자검토완료 |
+| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/page-ui.md`, TC-PAGE-UI-001~041)를 대상으로 automation-judge Skill 6개 축 1차 평가 수행. Hard Rule 해당 항목 없음. Yes 15건 / Hold 21건 / No 5건. TC-PAGE-UI-040/041과 cart.md TC-CART-012/013 간 Cross-Feature TC 중복 의심을 발견해 별도 기록. | 평가중 |
+| 2026-08-24 | Google Sheet(Automation Judge 워크시트)에 AI 작성 영역(41건 신규 추가) 동기화 완료. 이후 QA Decision/QA Comment 재조회(judge-list) 수행 결과 TC-PAGE-UI-001~041 전체 QA Decision이 아직 비어있음(미검토) 확인. Skill Workflow 8번에 따라 최초 재조회 수행으로 상태 전환 | 사용자검토완료 |
+| 2026-08-24 | 사용자의 "page-ui 확정해줘" 요청에 따라 Google Sheet 재조회(judge-list) 수행 결과 QA Decision 41건 전부 입력 완료 확인(Approved 21 / Rejected 20 / Hold 0, 미검토 0). 확정 전 Validation(TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부) 4개 항목 모두 통과. TC-PAGE-UI-040/041 중복 의심 건은 사용자가 둘 다 Rejected로 결정해 cart.md TC-CART-012/013(Rejected)과 일관되게 정리됨. 최종 "자동화대상확정" 전환은 사용자의 채팅 직접 승인 대기 중이며 아직 진행하지 않음 | 사용자검토완료 |
 | 2026-08-24 | 사용자가 채팅에서 직접 "page-ui 확정해줘"라고 명시적으로 확정 요청. Approved 21건을 최종 자동화 대상으로 확정하고 Rejected 20건은 자동화 제외로 확정. | 자동화대상확정 |

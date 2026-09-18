@@ -27,7 +27,7 @@ gates.**
 ## Summary
 
 - Designed and implemented a full QA process — **PRD → Test Case design →
-  automation candidate selection → Roadmap → implementation → CI/CD → Slack
+  automation judge selection → Roadmap → implementation → CI/CD → Slack
   notification** — for an e-commerce practice site
   ([automationexercise.com](https://automationexercise.com/)).
 - Automated **76 test cases across 7 features** (login/logout, signup/account
@@ -43,7 +43,7 @@ gates.**
 |---|---|---|
 | Requirements analysis / PRD writing | Verified real site behavior while writing 7 PRDs; corrected mismatches through a re-approval process | [docs/prd/](./docs/prd/) |
 | Test case design | Quantified Priority via Impact × Likelihood risk scoring; suspected defects tracked separately | [docs/tc/](./docs/tc/) |
-| Automation candidate selection | 6-axis scoring model (business criticality, regression frequency, stability, etc.) | [docs/tc/automation-candidates/](./docs/tc/automation-candidates/) |
+| Automation judge selection | 6-axis scoring model (business criticality, regression frequency, stability, etc.) | [docs/tc/automation-judge/](./docs/tc/automation-judge/) |
 | Test automation implementation | Selenium + pytest + POM, shared wait/retry logic abstracted into `BasePage` | [automation/](./automation/) |
 | Defect discovery & analysis | 2 real production defects, each with reproduction steps, root cause, and rule-out reasoning | [docs/defects/](./docs/defects/) |
 | CI/CD pipeline | GitHub Actions with push/schedule/manual triggers, headless Chrome, artifact upload | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |

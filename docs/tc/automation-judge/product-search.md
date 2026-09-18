@@ -1,21 +1,21 @@
 ---
-문서유형: Automation Candidate Evaluation
+문서유형: Automation Judge Evaluation
 상태: 자동화대상확정   # 평가중 | 사용자검토완료 | 자동화대상확정
 대상 TC 문서: docs/tc/product-search.md
 대상 TC 문서 최근 변경일(평가 시점 기준): 2026-08-31
 관련 Feature PRD: feature/product-search.md
-Google Sheet 워크시트: Automation Candidates
+Google Sheet 워크시트: Automation Judge
 최초 작성일: 2026-08-24
 최근 변경일: 2026-08-31
 최근 Sheet 동기화일: 2026-08-31
 확정일: 2026-08-31
 ---
 
-# Automation Candidate 평가 - 상품 검색
+# Automation Judge 평가 - 상품 검색
 
 ## AI 평가 결과 (AI 작성 영역 — Google Sheet와 동기화됨)
 
-| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Candidate (AI) | 선정/제외 사유 |
+| TC ID | Business Criticality | Regression Frequency | Automation Stability | Result Determinism | Manual Test Cost | Maintenance Cost | Automation Score | Judge (AI) | 선정/제외 사유 |
 |---|---|---|---|---|---|---|---|---|---|
 | TC-PRODUCT-SEARCH-001 | 4 | 4 | 3 | 5 | 2 | 3 | 21 | Yes | 검색 실행 시 URL 변경/섹션 제목 변경/매칭 필터링이 동시에 맞물려야 하는 검색 기능의 핵심 진입점이며 다른 검색 TC(002~010)의 전제가 되는 시나리오(BC4). 2026-08-31 REQ-PRODUCT-SEARCH-005 정정으로 매칭 판정 기준이 상품명뿐 아니라 하위 카테고리명까지 포함하도록 확장되어, 오매칭 판정 시 카테고리 taxonomy에 대한 의존성이 새로 생기고 요구사항이 이번에 한 차례 정정된 이력이 있어 Automation Stability(4→3)와 Maintenance Cost(2→3, 카테고리 데이터 의존성)를 하향 조정(Score 23→21, 재평가). 매 Release 반복 검증 가치가 크고(RF4) URL/제목/DOM으로 여전히 결정적 판정 가능(RD5)해 자동화 적극 권장은 유지. |
 | TC-PRODUCT-SEARCH-002 | 4 | 3 | 4 | 4 | 2 | 2 | 21 | Yes | 검색 결과 카드(이미지/가격/상품명/Add to cart/View Product)는 핵심 상품 탐색·구매 진입 UI 요소로(BC4), `page-ui.md` TC-PAGE-UI-015(ALL PRODUCTS 그리드 카드 구성, Approved)와 검증 대상 컴포넌트는 동일하나 검색 결과 필터링 경로에서 카드가 누락 없이 렌더링되는지는 별도 Risk Coverage(Skill 4.3)로 판단해 중복 제외하지 않음. 다만 이미 검증된 컴포넌트 재사용이라는 점에서 Automation Score 산정 시 여러 축을 크게 낮추지는 않되 후순위로 고려될 여지가 있어 사유에 명시함. |
@@ -45,17 +45,17 @@ Google Sheet 워크시트: Automation Candidates
 
 > 이 표는 Google Sheet의 QA Decision/QA Comment 컬럼을 그대로 옮겨온 참고용 스냅샷입니다.
 > 실제 값의 Source of Truth는 항상 Google Sheet이며, 이 문서를 직접 수정해도 Sheet에는
-> 반영되지 않습니다. 2026-08-27 재조회(candidate-list) 결과 TC-PRODUCT-SEARCH-001~009 전체
+> 반영되지 않습니다. 2026-08-27 재조회(judge-list) 결과 TC-PRODUCT-SEARCH-001~009 전체
 > QA Decision이 입력 완료되었음을 확인했습니다(Approved 7건, Rejected 2건, Hold 0건, 미검토
 > 0건 — 가공/재해석 없이 Sheet 값 그대로 반영). QA Comment는 전 항목 공란입니다.
 >
 > **2026-08-31 재평가 관련 주의**: TC-PRODUCT-SEARCH-001/006은 AI 평가 결과가 갱신되었으므로
-> 위 표의 Approved 값은 재평가 이전(2026-08-27) 시점의 스냅샷입니다. `candidate-sync`는 QA
+> 위 표의 Approved 값은 재평가 이전(2026-08-27) 시점의 스냅샷입니다. `judge-sync`는 QA
 > Decision/QA Comment 셀을 건드리지 않으므로 Sheet에는 기존 Approved 값이 그대로 남아 있을
 > 수 있으나, 재평가된 내용을 사용자가 다시 검토해 QA Decision을 재확인/재입력해 주셔야 합니다.
 > TC-PRODUCT-SEARCH-010은 이번에 신규 추가되어 아직 QA Decision이 입력되지 않았습니다(공란).
 >
-> **2026-08-31 candidate-sync 실제 반영 + candidate-list 재조회 결과(가공/재해석 없이 그대로
+> **2026-08-31 judge-sync 실제 반영 + judge-list 재조회 결과(가공/재해석 없이 그대로
 > 반영)**: 신규 추가 1건(TC-PRODUCT-SEARCH-010), AI 컬럼 갱신 9건(TC-PRODUCT-SEARCH-001~009)이
 > Sheet에 정상 반영되었습니다. 재조회 결과 TC-PRODUCT-SEARCH-001의 QA Decision은 `Approved`로
 > 유지되어 있고, TC-PRODUCT-SEARCH-006의 QA Decision도 `Approved`로 유지되어 있습니다(재평가로
@@ -63,7 +63,7 @@ Google Sheet 워크시트: Automation Candidates
 > 내용을 확인한 뒤 그대로 유지할지 변경할지는 사용자 판단입니다). TC-PRODUCT-SEARCH-010의 QA
 > Decision은 이 시점에는 아직 공란(미검토)이었습니다.
 >
-> **2026-08-31 재조회(candidate-list, 2차) 결과(가공/재해석 없이 그대로 반영)**: 사용자가
+> **2026-08-31 재조회(judge-list, 2차) 결과(가공/재해석 없이 그대로 반영)**: 사용자가
 > Sheet에 TC-PRODUCT-SEARCH-010의 QA Decision을 직접 `Approved`로 입력했습니다. 재조회 결과
 > TC-PRODUCT-SEARCH-001/006/010 세 TC 모두 QA Decision = `Approved`이며, 나머지 TC는 기존과
 > 동일(002~006, 008 = Approved, 007/009 = Rejected)합니다. 전체 10건 모두 정확히
@@ -73,16 +73,16 @@ Google Sheet 워크시트: Automation Candidates
 > **2026-08-31 TC-006 2차 재작성에 따른 주의(재확인 필요)**: `docs/tc/product-search.md`의
 > TC-PRODUCT-SEARCH-006이 같은 날 다시 재승인되어(REQ-PRODUCT-SEARCH-005/008 2차 정정), 검증
 > 범위가 "브랜드명 4건 + 상위 카테고리명 3건"에서 "브랜드명 4건만"으로 좁혀졌습니다. AI 평가
-> 결과의 6개 축 점수/Score(20)/Candidate(Yes)는 변경되지 않았지만 "선정/제외 사유" 텍스트는 새
+> 결과의 6개 축 점수/Score(20)/Judge(Yes)는 변경되지 않았지만 "선정/제외 사유" 텍스트는 새
 > 시나리오에 맞게 갱신했습니다. 위 표의 TC-PRODUCT-SEARCH-006 `Approved` 값은 **2차 정정 이전
-> (구 시나리오: 브랜드+상위 카테고리 7건) 시점의 Sheet 스냅샷**이며, `candidate-sync`를 다시
+> (구 시나리오: 브랜드+상위 카테고리 7건) 시점의 Sheet 스냅샷**이며, `judge-sync`를 다시
 > 실행하기 전까지는 Sheet의 값도 그대로일 수 있습니다. 새 시나리오(브랜드명 4건만)를 기준으로
 > 사용자가 QA Decision을 재확인/재입력해 주셔야 합니다.
 >
-> **2026-08-31 candidate-sync 재반영 + candidate-list 재조회(3차) 결과(가공/재해석 없이 그대로
-> 반영)**: `candidate-sync`가 다시 실행되어 신규 추가 0건, AI 컬럼 갱신 10건(TC-PRODUCT-SEARCH-
+> **2026-08-31 judge-sync 재반영 + judge-list 재조회(3차) 결과(가공/재해석 없이 그대로
+> 반영)**: `judge-sync`가 다시 실행되어 신규 추가 0건, AI 컬럼 갱신 10건(TC-PRODUCT-SEARCH-
 > 001~010, TC-006의 갱신된 "선정/제외 사유" 포함)이 Sheet에 반영되었고 QA Decision/QA Comment는
-> 보존되었습니다. 이어서 `candidate-list`로 재조회한 결과 QA Decision은 기존과 동일하게
+> 보존되었습니다. 이어서 `judge-list`로 재조회한 결과 QA Decision은 기존과 동일하게
 > 001~006/008/010 = `Approved`, 007/009 = `Rejected`이며(TC-006도 `Approved` 그대로 유지), Hold/
 > 미검토/잘못된 값은 없습니다. 이는 Sheet 상 값 자체는 바뀌지 않았다는 뜻이며, TC-006의 새
 > 시나리오(브랜드명 4건만)에 대한 재확인은 아래와 같이 사용자와의 직접 대화로 별도 확보했습니다:
@@ -104,14 +104,14 @@ Google Sheet 워크시트: Automation Candidates
   검증하는 TC이며, Hard Rule 적용 대상이 아닙니다.
 - **TC-001 재평가 필요성 판단(단순 문구 동기화 아님)**: Expected Result가 "상품명만 매칭"에서
   "상품명 또는 하위 카테고리명 매칭"으로 실제 검증 로직 자체가 확장되어, Automation
-  Stability/Maintenance Cost 재산정이 필요하다고 판단해 재평가함(Score 23→21, Candidate Yes 유지).
+  Stability/Maintenance Cost 재산정이 필요하다고 판단해 재평가함(Score 23→21, Judge Yes 유지).
 - **TC-006 재평가 필요성 판단**: Test Scenario/Preconditions/Test Steps/Expected Result가 전면
   재작성되어 검증 방향이 반대로 바뀜(기존: 하위 카테고리명(TOPS)도 매칭 안 됨 검증 → 현재: 하위
   카테고리명은 매칭되고 브랜드명·상위 카테고리명만 매칭 안 됨 검증)에 따라 재평가함. 재평가 결과
   6개 축의 자동화 특성(영향도/반복빈도/판정가능성/비용/유지보수)은 기존과 동일 수준으로 판단해
   점수(20점)는 변경하지 않았고, "선정/제외 사유" 텍스트만 새 시나리오에 맞게 갱신함.
 - **TC-010 신규 평가**: 이번에 신규 추가된 TC로, Hard Rule 해당 없음(위 항목 참조). 6개 축 평가
-  결과 Score 22, Candidate: Yes로 신규 판정함.
+  결과 Score 22, Judge: Yes로 신규 판정함.
 - **TC-006 2차 재평가 필요성 판단(2026-08-31, 같은 날 2차 정정)**: `docs/tc/product-search.md`의
   TC-PRODUCT-SEARCH-006이 REQ-PRODUCT-SEARCH-005/008 2차 정정에 따라 다시 재작성됨(자동화 구현/
   실행 결과 상위 카테고리명 women/men/kids 3건이 실제 상품명에 리터럴로 포함되어 매칭됨을 발견,
@@ -119,7 +119,7 @@ Google Sheet 워크시트: Automation Candidates
   항목으로 이관, TC-006 검증 대상을 브랜드명 4건만으로 축소). 검증 범위는 7개 keyword에서 4개
   keyword로 좁아졌으나 검증 방식(브랜드명 substring 검색 후 0건 확인)과 수행 난이도는 동일하다고
   판단해 6개 축 점수(BC3/RF3/AS3/RD5/MTC3/MC3, Score 20)는 변경하지 않고 "선정/제외 사유"
-  텍스트만 새 시나리오에 맞게 갱신함(Candidate: Yes 유지). 참고로 자동화 코드
+  텍스트만 새 시나리오에 맞게 갱신함(Judge: Yes 유지). 참고로 자동화 코드
   (`automation/tests/test_product_search.py::test_search_with_brand_keyword_shows_no_result`,
   parametrize 4건)가 이미 구현되어 pytest 실행 결과 4건 전건 PASSED로 확인된 상태이나, 이는
   구현 단계의 결과이며 이번 평가 축 재산정에는 반영하지 않음(평가는 자동화 적합성 판단이지 구현
@@ -181,7 +181,7 @@ Google Sheet 워크시트: Automation Candidates
 
 - **자동화 대상 재확정 시점 Validation 결과(2026-08-31, TC-006 2차 재작성에 따른 재확정 —
   사용자의 명시적 "자동화 대상 확정" 요청에 따른 재조회 및 확정 처리)**:
-  1. TC ID 유효성/중복: `candidate-list` 재조회 결과 Sheet의 TC-PRODUCT-SEARCH-001~010(10건)이
+  1. TC ID 유효성/중복: `judge-list` 재조회 결과 Sheet의 TC-PRODUCT-SEARCH-001~010(10건)이
      `docs/tc/product-search.md`에 실제로 존재하는 TC ID와 1:1로 정확히 일치하며, Sheet 내
      중복 없음을 확인.
   2. QA Decision 값 검증: 10건 전체가 정확히 `Approved`(8건: 001~006, 008, 010) 또는
@@ -204,7 +204,7 @@ Google Sheet 워크시트: Automation Candidates
 일시적으로 `사용자검토완료`로 되돌아갔으나, 사용자가 새 시나리오 기준으로 QA Decision(Approved)을
 직접 재확인함에 따라 재조회·Validation을 통과해 아래 8건이 자동화 대상으로 재확정되었습니다.
 
-| TC ID | Automation Score | Candidate (AI) | QA Decision |
+| TC ID | Automation Score | Judge (AI) | QA Decision |
 |---|---|---|---|
 | TC-PRODUCT-SEARCH-001 | 21 | Yes | Approved |
 | TC-PRODUCT-SEARCH-002 | 21 | Yes | Approved |
@@ -228,10 +228,10 @@ Google Sheet 워크시트: Automation Candidates
 
 | 날짜 | 변경 사유 | 상태 |
 |---|---|---|
-| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/product-search.md`, TC-PRODUCT-SEARCH-001~009)를 대상으로 automation-candidate Skill 6개 축 1차 평가 수행. Hard Rule 해당 항목 없음. Yes 7건 / Hold 2건 / No 0건. 사용자 요청에 따라 login-logout/cart/page-ui(특히 CATEGORY/BRANDS 필터링 TC)와의 Cross-Feature 중복 여부를 검토했으며, page-ui TC-PAGE-UI-040/041 수준의 완전한 중복은 발견되지 않았으나 TC-PRODUCT-SEARCH-002(카드 컴포넌트 재사용)와 TC-PRODUCT-SEARCH-007(스크롤 노출 패턴, page-ui TC-PAGE-UI-027 Rejected 선례 있음)에 부분적 중복/저ROI 참고사항을 기록함. | 평가중 |
-| 2026-08-27 | 사용자의 명시적 "자동화 대상 확정" 요청에 따라 Google Sheet 재조회(candidate-list) 수행. TC-PRODUCT-SEARCH-001~009 전체 QA Decision이 입력 완료(Approved 7건, Rejected 2건, Hold 0건, 미검토 0건)됨을 확인. TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부 Validation을 모두 통과해 Approved 7건(001~006, 008)을 자동화 대상으로 확정(007, 009는 Rejected로 제외). | 자동화대상확정 |
-| 2026-08-31 | 원본 TC 문서(`docs/tc/product-search.md`) 재승인(REQ-PRODUCT-SEARCH-005 정정)에 따라 "자동화대상확정 문서 재수정 시 처리" 절차 수행. TC-PRODUCT-SEARCH-001(Expected Result 확장 — 상품명 또는 하위 카테고리명 매칭)과 TC-PRODUCT-SEARCH-006(검증 방향 반전 — 하위 카테고리명은 매칭, 브랜드명·상위 카테고리명만 제외)을 재평가함(사용자 승인 후 진행). TC-001: AS 4→3, MC 2→3, Score 23→21로 조정(Candidate Yes 유지). TC-006: 6개 축 점수는 20점으로 변경 없음, 사유 텍스트만 새 시나리오에 맞게 갱신. 신규 TC-PRODUCT-SEARCH-010(하위 카테고리명 substring 매칭, P0)을 6개 축 기준 신규 평가(Score 22, Candidate: Yes)해 표에 추가. TC-002/003/004/005/007/008/009는 이번 변경과 무관해 그대로 유지. 영향받는 TC(001/006)와 신규 TC(010)는 QA Decision을 다시 받아야 하므로 문서 상태를 `자동화대상확정 → 사용자검토완료`로 되돌림(대상 TC 문서 최근 변경일도 2026-08-22→2026-08-31로 갱신). | 사용자검토완료 |
-| 2026-08-31 | `candidate-sync --dry-run`(신규 1건 TC-010, AI 컬럼 갱신 9건 TC-001~009 확인) 이후 실제 `candidate-sync` 반영 완료(신규 추가 1건, AI 컬럼 갱신 9건, QA Decision/QA Comment 보존 확인). 이어서 `candidate-list`로 재조회한 결과 TC-PRODUCT-SEARCH-001 QA Decision=Approved(유지), TC-PRODUCT-SEARCH-006 QA Decision=Approved(유지), TC-PRODUCT-SEARCH-010 QA Decision=공란(미검토)을 확인해 위 QA Decision 표에 가공 없이 반영. TC-010의 QA Decision이 입력될 때까지 대기하며, 사용자가 명시적으로 "자동화 대상 확정"을 요청하기 전까지 문서 상태는 `사용자검토완료`로 유지(자동화대상확정으로 임의 전환하지 않음). | 사용자검토완료 |
-| 2026-08-31 | 사용자가 Sheet에 TC-PRODUCT-SEARCH-010의 QA Decision을 `Approved`로 직접 입력함에 따라, 사용자의 명시적 "자동화 대상 확정" 요청을 받아 `candidate-list` 재조회(2차) 수행. TC-PRODUCT-SEARCH-001/006/010 세 TC 모두 QA Decision=Approved 확인(나머지 002~006/008=Approved, 007/009=Rejected는 기존과 동일). TC ID 유효성/중복, QA Decision 값(잘못된 값/미검토 없음), 원본 TC 승인완료 상태, TC 변경 여부(평가 시점 기준 최근 변경일 2026-08-31과 원본 최근 변경일 2026-08-31 일치) 4개 Validation을 모두 통과. TC-001 재평가(Score 23→21)/TC-006 재평가(사유 갱신, Score 20 유지)/TC-010 신규 승인을 반영해 Approved 8건(001~006, 008, 010)을 자동화 대상으로 최종 확정(Rejected 2건: 007, 009, Hold 0건). 문서 상태를 `사용자검토완료 → 자동화대상확정`으로 전환하고 확정일(2026-08-31)을 기록. | 자동화대상확정 |
-| 2026-08-31 | `docs/tc/product-search.md` TC-PRODUCT-SEARCH-006이 같은 날 2차로 재작성됨(REQ-PRODUCT-SEARCH-005/008 2차 정정 — 브랜드명은 완전 일치 포함 항상 제외로 명확화, 상위 카테고리명 women/men/kids 3건은 실제 상품명에 리터럴 포함되어 전제 불성립으로 제거 및 PRD 4.2 미확인 항목 이관, 검증 범위를 브랜드명 4건만으로 축소)에 따라 "자동화대상확정 문서 재수정 시 처리" 절차 수행. TC-PRODUCT-SEARCH-006만 재평가함: 검증 방식(브랜드명 substring 검색 후 0건 확인)과 난이도가 변경 전과 동일하다고 판단해 6개 축 점수(BC3/RF3/AS3/RD5/MTC3/MC3, Score 20)는 유지하고 "선정/제외 사유" 텍스트만 새 시나리오(브랜드명 4건만)에 맞게 갱신(Candidate: Yes 유지). 참고로 자동화 코드(`test_search_with_brand_keyword_shows_no_result`, parametrize 4건)가 이미 구현되어 pytest 4건 전건 PASSED 확인됨(구현 결과는 참고 정보이며 평가 축 재산정에는 미반영). TC-002/003/004/005/007/008/009/010은 이번 변경과 무관해 그대로 유지. TC-006의 Test Scenario/Expected Result 자체가 실질적으로 변경되어 QA Decision을 새 시나리오 기준으로 다시 받아야 하므로, 문서 상태를 `자동화대상확정 → 사용자검토완료`로 되돌리고 확정일을 비움. 기존 "Approved TC 목록"은 이전 확정 이력(참고용, 재확정 필요)으로 표시. Google Sheet 동기화는 사용자 확인 후 별도 진행 예정. | 사용자검토완료 |
-| 2026-08-31 | `candidate-sync` 재실행(신규 0건, AI 컬럼 갱신 10건 — TC-006의 갱신된 "선정/제외 사유" 반영, QA Decision/QA Comment 보존 확인) 및 `candidate-list` 재조회(3차, 직접 실행으로 독립 검증) 완료. QA Decision은 기존과 동일하게 001~006/008/010=Approved, 007/009=Rejected(Hold/미검토/잘못된 값 없음)이며, TC-006의 Approved 값은 Sheet 상 변경 없이 유지된 것이었음. 이에 대해 사용자에게 "TC-006이 브랜드명 4건만 검증하는 새 시나리오로 바뀌었는데 Approved를 재확인하시겠습니까?"를 직접 질의해 "재확인(Approved 유지)" 답변을 받아, TC-006의 QA Decision이 새 시나리오 기준으로도 유효함을 확보. TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부(원본 TC 최근 변경일과 평가 시점 기준 변경일 2026-08-31 일치, TC-006 2차 재평가 내용이 AI 평가 결과에 이미 반영됨) 4개 Validation을 모두 통과해 Approved 8건(001~006, 008, 010)을 자동화 대상으로 재확정(Rejected 2건: 007, 009, Hold 0건). 문서 상태를 `사용자검토완료 → 자동화대상확정`으로 전환하고 확정일(2026-08-31)을 기록. | 자동화대상확정 |
+| 2026-08-24 | 승인완료된 TC 문서(`docs/tc/product-search.md`, TC-PRODUCT-SEARCH-001~009)를 대상으로 automation-judge Skill 6개 축 1차 평가 수행. Hard Rule 해당 항목 없음. Yes 7건 / Hold 2건 / No 0건. 사용자 요청에 따라 login-logout/cart/page-ui(특히 CATEGORY/BRANDS 필터링 TC)와의 Cross-Feature 중복 여부를 검토했으며, page-ui TC-PAGE-UI-040/041 수준의 완전한 중복은 발견되지 않았으나 TC-PRODUCT-SEARCH-002(카드 컴포넌트 재사용)와 TC-PRODUCT-SEARCH-007(스크롤 노출 패턴, page-ui TC-PAGE-UI-027 Rejected 선례 있음)에 부분적 중복/저ROI 참고사항을 기록함. | 평가중 |
+| 2026-08-27 | 사용자의 명시적 "자동화 대상 확정" 요청에 따라 Google Sheet 재조회(judge-list) 수행. TC-PRODUCT-SEARCH-001~009 전체 QA Decision이 입력 완료(Approved 7건, Rejected 2건, Hold 0건, 미검토 0건)됨을 확인. TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부 Validation을 모두 통과해 Approved 7건(001~006, 008)을 자동화 대상으로 확정(007, 009는 Rejected로 제외). | 자동화대상확정 |
+| 2026-08-31 | 원본 TC 문서(`docs/tc/product-search.md`) 재승인(REQ-PRODUCT-SEARCH-005 정정)에 따라 "자동화대상확정 문서 재수정 시 처리" 절차 수행. TC-PRODUCT-SEARCH-001(Expected Result 확장 — 상품명 또는 하위 카테고리명 매칭)과 TC-PRODUCT-SEARCH-006(검증 방향 반전 — 하위 카테고리명은 매칭, 브랜드명·상위 카테고리명만 제외)을 재평가함(사용자 승인 후 진행). TC-001: AS 4→3, MC 2→3, Score 23→21로 조정(Judge Yes 유지). TC-006: 6개 축 점수는 20점으로 변경 없음, 사유 텍스트만 새 시나리오에 맞게 갱신. 신규 TC-PRODUCT-SEARCH-010(하위 카테고리명 substring 매칭, P0)을 6개 축 기준 신규 평가(Score 22, Judge: Yes)해 표에 추가. TC-002/003/004/005/007/008/009는 이번 변경과 무관해 그대로 유지. 영향받는 TC(001/006)와 신규 TC(010)는 QA Decision을 다시 받아야 하므로 문서 상태를 `자동화대상확정 → 사용자검토완료`로 되돌림(대상 TC 문서 최근 변경일도 2026-08-22→2026-08-31로 갱신). | 사용자검토완료 |
+| 2026-08-31 | `judge-sync --dry-run`(신규 1건 TC-010, AI 컬럼 갱신 9건 TC-001~009 확인) 이후 실제 `judge-sync` 반영 완료(신규 추가 1건, AI 컬럼 갱신 9건, QA Decision/QA Comment 보존 확인). 이어서 `judge-list`로 재조회한 결과 TC-PRODUCT-SEARCH-001 QA Decision=Approved(유지), TC-PRODUCT-SEARCH-006 QA Decision=Approved(유지), TC-PRODUCT-SEARCH-010 QA Decision=공란(미검토)을 확인해 위 QA Decision 표에 가공 없이 반영. TC-010의 QA Decision이 입력될 때까지 대기하며, 사용자가 명시적으로 "자동화 대상 확정"을 요청하기 전까지 문서 상태는 `사용자검토완료`로 유지(자동화대상확정으로 임의 전환하지 않음). | 사용자검토완료 |
+| 2026-08-31 | 사용자가 Sheet에 TC-PRODUCT-SEARCH-010의 QA Decision을 `Approved`로 직접 입력함에 따라, 사용자의 명시적 "자동화 대상 확정" 요청을 받아 `judge-list` 재조회(2차) 수행. TC-PRODUCT-SEARCH-001/006/010 세 TC 모두 QA Decision=Approved 확인(나머지 002~006/008=Approved, 007/009=Rejected는 기존과 동일). TC ID 유효성/중복, QA Decision 값(잘못된 값/미검토 없음), 원본 TC 승인완료 상태, TC 변경 여부(평가 시점 기준 최근 변경일 2026-08-31과 원본 최근 변경일 2026-08-31 일치) 4개 Validation을 모두 통과. TC-001 재평가(Score 23→21)/TC-006 재평가(사유 갱신, Score 20 유지)/TC-010 신규 승인을 반영해 Approved 8건(001~006, 008, 010)을 자동화 대상으로 최종 확정(Rejected 2건: 007, 009, Hold 0건). 문서 상태를 `사용자검토완료 → 자동화대상확정`으로 전환하고 확정일(2026-08-31)을 기록. | 자동화대상확정 |
+| 2026-08-31 | `docs/tc/product-search.md` TC-PRODUCT-SEARCH-006이 같은 날 2차로 재작성됨(REQ-PRODUCT-SEARCH-005/008 2차 정정 — 브랜드명은 완전 일치 포함 항상 제외로 명확화, 상위 카테고리명 women/men/kids 3건은 실제 상품명에 리터럴 포함되어 전제 불성립으로 제거 및 PRD 4.2 미확인 항목 이관, 검증 범위를 브랜드명 4건만으로 축소)에 따라 "자동화대상확정 문서 재수정 시 처리" 절차 수행. TC-PRODUCT-SEARCH-006만 재평가함: 검증 방식(브랜드명 substring 검색 후 0건 확인)과 난이도가 변경 전과 동일하다고 판단해 6개 축 점수(BC3/RF3/AS3/RD5/MTC3/MC3, Score 20)는 유지하고 "선정/제외 사유" 텍스트만 새 시나리오(브랜드명 4건만)에 맞게 갱신(Judge: Yes 유지). 참고로 자동화 코드(`test_search_with_brand_keyword_shows_no_result`, parametrize 4건)가 이미 구현되어 pytest 4건 전건 PASSED 확인됨(구현 결과는 참고 정보이며 평가 축 재산정에는 미반영). TC-002/003/004/005/007/008/009/010은 이번 변경과 무관해 그대로 유지. TC-006의 Test Scenario/Expected Result 자체가 실질적으로 변경되어 QA Decision을 새 시나리오 기준으로 다시 받아야 하므로, 문서 상태를 `자동화대상확정 → 사용자검토완료`로 되돌리고 확정일을 비움. 기존 "Approved TC 목록"은 이전 확정 이력(참고용, 재확정 필요)으로 표시. Google Sheet 동기화는 사용자 확인 후 별도 진행 예정. | 사용자검토완료 |
+| 2026-08-31 | `judge-sync` 재실행(신규 0건, AI 컬럼 갱신 10건 — TC-006의 갱신된 "선정/제외 사유" 반영, QA Decision/QA Comment 보존 확인) 및 `judge-list` 재조회(3차, 직접 실행으로 독립 검증) 완료. QA Decision은 기존과 동일하게 001~006/008/010=Approved, 007/009=Rejected(Hold/미검토/잘못된 값 없음)이며, TC-006의 Approved 값은 Sheet 상 변경 없이 유지된 것이었음. 이에 대해 사용자에게 "TC-006이 브랜드명 4건만 검증하는 새 시나리오로 바뀌었는데 Approved를 재확인하시겠습니까?"를 직접 질의해 "재확인(Approved 유지)" 답변을 받아, TC-006의 QA Decision이 새 시나리오 기준으로도 유효함을 확보. TC ID 유효성/중복, QA Decision 값, 원본 TC 승인완료 상태, TC 변경 여부(원본 TC 최근 변경일과 평가 시점 기준 변경일 2026-08-31 일치, TC-006 2차 재평가 내용이 AI 평가 결과에 이미 반영됨) 4개 Validation을 모두 통과해 Approved 8건(001~006, 008, 010)을 자동화 대상으로 재확정(Rejected 2건: 007, 009, Hold 0건). 문서 상태를 `사용자검토완료 → 자동화대상확정`으로 전환하고 확정일(2026-08-31)을 기록. | 자동화대상확정 |

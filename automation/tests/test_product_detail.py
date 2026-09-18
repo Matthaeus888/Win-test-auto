@@ -5,7 +5,7 @@ Source of Truth:
 - docs/automation/AUTOMATION_GUIDE.md 4.2절(Test Layer 책임), 8절(Assertion 원칙),
   10절(테스트 독립성)
 
-이 파일은 다음 Approved TC 6건을 다룬다(`docs/tc/automation-candidates/product-detail.md`
+이 파일은 다음 Approved TC 6건을 다룬다(`docs/tc/automation-judge/product-detail.md`
 참고, 나머지 21건은 Rejected로 자동화 대상이 아님):
 - TC-001: Home 페이지 상품 카드의 "View Product" 링크 클릭 시 이동한 URL이
   `/product_details/{id}` 패턴을 따르는지.

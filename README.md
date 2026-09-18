@@ -54,7 +54,7 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 |---|---|---|
 | **요구사항 분석 · PRD 작성** | 실제 사이트 동작을 확인하며 Project/Feature PRD 7건 작성, 실측과 다른 부분은 발견 즉시 재승인 절차로 수정 | [docs/prd/](./docs/prd/) |
 | **Test Case 설계** | Priority(P0~P2)를 Impact×Likelihood Risk Score로 정량 산정, 결함 의심 항목은 별도 섹션으로 분리 | [docs/tc/](./docs/tc/) |
-| **자동화 대상 선정** | Business Criticality·회귀 빈도·자동화 안정성 등 6축 정량 평가(Automation Score)로 자동화 여부 판단 | [docs/tc/automation-candidates/](./docs/tc/automation-candidates/) |
+| **자동화 대상 선정** | Business Criticality·회귀 빈도·자동화 안정성 등 6축 정량 평가(Automation Score)로 자동화 여부 판단 | [docs/tc/automation-judge/](./docs/tc/automation-judge/) |
 | **테스트 자동화 구현** | Selenium + pytest + Page Object Model, 공통 Wait/재시도 로직을 `BasePage`로 추상화 | [automation/](./automation/) |
 | **결함 발견·분석 능력** | 실제 프로덕션 결함 2건을 재현 절차·근본 원인·판정 근거까지 갖춘 정식 리포트로 기록 | [docs/defects/](./docs/defects/) |
 | **CI/CD 파이프라인 구축** | GitHub Actions로 push/스케줄/수동 실행 3가지 트리거, headless Chrome, Artifact 업로드 | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |

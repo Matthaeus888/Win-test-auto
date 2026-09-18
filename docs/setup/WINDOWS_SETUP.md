@@ -21,9 +21,9 @@ docs/prd/project-prd.md, docs/prd/feature/{slug}.md      ← 사용자 승인
    │  tc-agent  (+ tc-writing Skill, sheets_sync)
    ▼
 docs/tc/{slug}.md                                        (Google Sheets 기록 가능)
-   │  automation-candidate-agent (+ automation-candidate Skill)
+   │  automation-judge-agent (+ automation-judge Skill)
    ▼
-docs/tc/automation-candidates/{slug}.md                  ← 사용자 승인(자동화 대상 확정)
+docs/tc/automation-judge/{slug}.md                  ← 사용자 승인(자동화 대상 확정)
    │  roadmap-agent
    ▼
 docs/roadmap/ROADMAP.md                                  ← 사용자 승인
@@ -133,7 +133,7 @@ claude
 Claude Code 안에서
 
 - `/mcp` — playwright / shrimp-task-manager 연결 상태 확인
-- `/agents` — `prd-agent`, `tc-agent`, `automation-candidate-agent`, `roadmap-agent`,
+- `/agents` — `prd-agent`, `tc-agent`, `automation-judge-agent`, `roadmap-agent`,
   `automation-developer-agent` 인식 여부 확인
 
 `CLAUDE.md` 와 `shrimp-rules.md` 는 저장소 루트에 있으므로 이 폴더에서 실행할 때 자동으로
@@ -241,11 +241,11 @@ TC와 자동화 후보 평가 결과를 구글 시트에 기록하려면 추가 
    GOOGLE_SERVICE_ACCOUNT_FILE=C:\Users\8j8n\secrets\qa-process-credentials.json
    GOOGLE_SHEET_ID=...
    GOOGLE_WORKSHEET_NAME=TC
-   GOOGLE_CANDIDATE_SHEET_ID=...
-   GOOGLE_CANDIDATE_WORKSHEET_NAME=Automation Candidates
+   GOOGLE_JUDGE_SHEET_ID=...
+   GOOGLE_JUDGE_WORKSHEET_NAME=Automation Judge
    ```
 
-   `GOOGLE_CANDIDATE_SHEET_ID` 는 `GOOGLE_SHEET_ID` 와 **다른 Spreadsheet 문서**여야 합니다
+   `GOOGLE_JUDGE_SHEET_ID` 는 `GOOGLE_SHEET_ID` 와 **다른 Spreadsheet 문서**여야 합니다
    (같은 문서의 다른 탭이 아님).
 
 5. 확인
@@ -272,7 +272,7 @@ Claude Code 안에서 단계별로 Agent에게 요청합니다. 예:
 
 - "checkout 기능 Feature PRD를 작성해줘" → `prd-agent` → 검토 후 승인
 - "승인된 checkout PRD로 TC를 작성해줘" → `tc-agent` (`tc-writing` Skill 기준 적용)
-- "checkout TC의 자동화 대상을 평가해줘" → `automation-candidate-agent` → **최종 선정은 사용자**
+- "checkout TC의 자동화 대상을 평가해줘" → `automation-judge-agent` → **최종 선정은 사용자**
 - "확정된 자동화 대상으로 Roadmap을 갱신해줘" → `roadmap-agent` → 승인
 - "Roadmap Phase N을 구현해줘" → `automation-developer-agent` (Locator 조사에 playwright MCP 사용)
 

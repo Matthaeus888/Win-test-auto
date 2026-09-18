@@ -29,7 +29,7 @@ Phase 순서대로 구현하되, 실제 페이지 구조를 먼저 확인하고,
   않고, 그 사실을 사용자에게 안내한 뒤 대기합니다.
 - `docs/automation/AUTOMATION_GUIDE.md`가 `상태: 승인완료`가 아니면 구현을 시작하지
   않습니다.
-- **승인된 산출물(PRD, TC, Candidate 문서, Roadmap, AUTOMATION_GUIDE)을 임의로 수정하지
+- **승인된 산출물(PRD, TC, Judge 문서, Roadmap, AUTOMATION_GUIDE)을 임의로 수정하지
   않습니다**(CLAUDE.md 7절 Approved Artifact Protection). 이 에이전트는 이 문서들을 읽기
   전용으로만 사용합니다.
 - Roadmap/TC/PRD/AUTOMATION_GUIDE 내용이 서로 충돌하면(예: Roadmap의 대상 TC가 원본 TC

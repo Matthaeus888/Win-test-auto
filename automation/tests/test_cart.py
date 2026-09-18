@@ -6,7 +6,7 @@ Source of Truth:
   10절(테스트 독립성), 11절(테스트 데이터 관리)
 
 이 파일은 다음 Approved TC 13건을 다룬다(Rejected 3건 TC-CART-007/012/013은 자동화 대상이
-아니므로 다루지 않음, `docs/tc/automation-candidates/cart.md` 참고):
+아니므로 다루지 않음, `docs/tc/automation-judge/cart.md` 참고):
 - TC-001/002/003: Home 페이지 상품 카드 "Add to cart" 클릭 시 담기 확인 모달(`#cartModal`,
   `pages/add_to_cart_modal.py`)의 구성요소/버튼/링크 동작.
 - TC-004: Home과 Products 페이지에서 각각 담은 상품이 하나의 장바구니로 병합되는지.

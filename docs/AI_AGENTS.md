@@ -14,7 +14,7 @@ PRD를 쓰는 사람과 TC를 쓰는 사람, 코드를 리뷰하는 사람이 �
 |---|---|---|---|
 | `prd-agent` | Project/Feature PRD 작성 | 사용자 인터뷰, 실제 사이트 확인 | `docs/prd/**.md` |
 | `tc-agent` | 승인된 PRD 기반 Test Case 작성 | 승인된 PRD | `docs/tc/**.md` + Google Sheet |
-| `automation-candidate-agent` | 자동화 대상 1차 평가·확정 | 승인된 TC | `docs/tc/automation-candidates/**.md` |
+| `automation-judge-agent` | 자동화 대상 1차 평가·확정 | 승인된 TC | `docs/tc/automation-judge/**.md` |
 | `roadmap-agent` | Phase별 구현 순서 설계 | 승인된 TC + 자동화 대상 확정 | `docs/roadmap/ROADMAP.md` |
 | `automation-developer-agent` | 자동화 코드 구현 + 테스트 실행 | 승인된 Roadmap | `automation/**` |
 
