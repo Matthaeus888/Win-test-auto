@@ -2,8 +2,7 @@
 
 # QA Automation Portfolio
 
-**요구사항 정의부터 CI 결과 알림까지 — QA 프로세스 전체를 설계하고, AI 에이전트를
-승인 게이트로 통제하며 자동화한 프로젝트**
+**CI/CD 기반 QA의 전체 프로세스를 AI agent가 실행하며 사람이 판단,통제하는 업무 리소스와 품질 향상을 위한 자동화 프로젝트**
 
 [![CI](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
@@ -19,8 +18,6 @@
 ---
 
 ## 프로젝트 소개
-
-**사람이 최종 판단하고 AI가 반복적인 작업을 보조해 업무 리소스와 품질 향상을 위한 자동화 프로젝트**** 
 
 1.이커머스 연습 사이트의 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 76건의 Test Case를 자동화(Selenium + pytest + Page Object Model)했습니다.
 테스트 자동화 과정에서 실제 결함 2건을 발견하고 재현 절차·근본 원인까지 분석해 이슈 리포트를 생성했습니다. → [이슈 리포트 보기](./docs/defects/README.md)
