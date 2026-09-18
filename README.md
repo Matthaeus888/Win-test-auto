@@ -159,6 +159,10 @@ Push 자동화가 아니라 **판단을 사람에게 맡기는 보안 점검**�
 AI가 무엇을 자율적으로 하고 무엇은 반드시 사람이 결정하도록 설계했는지, 실제로
 산출물 간 충돌이 발생했을 때 어떻게 처리했는지는 [`docs/AI_AGENTS.md`](./docs/AI_AGENTS.md)에서 확인할 수 있습니다.
 
+사람이 승인한 산출물(PRD·Roadmap)은 [`scripts/docs_sync`](./scripts/docs_sync/)로 Google
+Docs에, TC·자동화 대상 선정 결과는 [`scripts/sheets_sync`](./scripts/sheets_sync/)로 Google
+Sheets에 각각 반영되어, 팀원이 저장소를 열지 않고도 최신 산출물을 확인할 수 있습니다.
+
 ## 테스트 현황
 
 | Feature | 승인된 TC 수 | 자동화 여부 |
@@ -215,7 +219,8 @@ qa-automation-portfolio/
 │   └── conftest.py, requirements.txt, pytest.ini
 ├── scripts/
 │   ├── notify_slack/                # CI 실패 시 Slack Webhook 알림
-│   ├── sheets_sync/                 # TC ↔ Google Sheets 연동
+│   ├── sheets_sync/                 # TC/자동화 대상 선정 ↔ Google Sheets 연동
+│   ├── docs_sync/                   # PRD/Roadmap → Google Docs 연동
 │   └── security_check/              # 🔒 pip-audit 의존성 보안 점검 (로컬+CI)
 ├── .github/workflows/ci.yml        # GitHub Actions CI
 ├── .claude/agents/, .claude/skills/ # Sub Agent / Skill 정의
@@ -244,7 +249,7 @@ qa-automation-portfolio/
 | CI/CD | GitHub Actions |
 | 보안 점검 | pip-audit (의존성 취약점, 로컬+CI) |
 | 알림 | Slack (CI 결과 알림 전용) |
-| 협업 도구 | Google Sheets (TC/자동화 대상 관리), Claude Code Sub Agent |
+| 협업 도구 | Google Sheets (TC/자동화 대상 관리), Google Docs (PRD/Roadmap 공유), Claude Code Sub Agent |
 
 ## License
 
