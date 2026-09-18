@@ -3,9 +3,9 @@
 # QA Automation Portfolio
 
 **CI/CD 기반 QA의 전체 프로세스를 AI agent가 실행하며 사람이 판단,통제하는 자동화 프로젝트**
-
-                     업무 리소스 **개선**, 품질 **향상**, 프로세스 **효율화**
-             
+                   
+  업무 리소스 **개선**, 품질 **향상**, 프로세스 **효율화**
+            
 [![CI](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Matthaeus888/qa-automation-portfolio/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Selenium](https://img.shields.io/badge/selenium-4.x-43B02A)
