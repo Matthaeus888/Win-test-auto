@@ -12,7 +12,7 @@
 ![Tests](https://img.shields.io/badge/automated_TCs-76-informational)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
-[English README](./README.en.md) · [결함 리포트](./docs/defects/README.md) · [트러블슈팅](./docs/troubleshooting/) · [AI 에이전트 설계](./docs/AI_AGENTS.md)
+[English README](./README.en.md) · [이슈 리포트](./docs/defects/README.md) · [트러블슈팅](./docs/troubleshooting/) · [AI 에이전트 설계](./docs/AI_AGENTS.md)
 
 </div>
 
@@ -20,17 +20,24 @@
 
 ## 프로젝트 소개
 
-**QA 진행시, 사람이 최종 판단하고 AI가 반복적인 작업을 보조해 업무 리소스와 품질 향상을 위한 자동화 프로젝트** 
+**사람이 최종 판단하고 AI가 반복적인 작업을 보조해 업무 리소스와 품질 향상을 위한 자동화 프로젝트**** 
 
 1.이커머스 연습 사이트의 7개 기능(로그인/로그아웃, 회원가입/계정삭제, 상단 네비게이션, 상품 검색, 장바구니, 상품 상세, 페이지 UI)에 걸쳐 76건의 Test Case를 자동화(Selenium + pytest + Page Object Model)했습니다.
-테스트 자동화 과정에서 실제 결함 2건을 발견하고 재현 절차·근본 원인까지 분석해 이슈 리포트를 생성했습니다. → [결함 리포트 보기](./docs/defects/README.md)
+테스트 자동화 과정에서 실제 결함 2건을 발견하고 재현 절차·근본 원인까지 분석해 이슈 리포트를 생성했습니다. → [이슈 리포트 보기](./docs/defects/README.md)
 
-2.이커머스 연습 사이트[(automationexercise.com)](https://automationexercise.com)를 대상으로, PRD 작성 → TC 설계/작성 → 자동화 대상 선정 및 계획 → 코드 구현 → CI/CD(자동화 테스트 포함) → Slack 알림과 구글스프레드시트에 결과 작성까지 QA 프로세스 전체를 설계·구현했습니다.
+2.이커머스 연습 사이트[(automationexercise.com)](https://automationexercise.com)를 대상으로, PRD 작성 → TC 설계/작성 → 자동화 대상 선정 및 계획 → 코드 구현 → CI/CD(자동화 테스트 포함) → Slack 알림과 Google sheet에 결과 작성까지 QA 프로세스 전체를 설계·구현했습니다.
 
 3.요구사항 작성, TC 작성, 자동화 선별, 계획, 자동화 작성 AI agent를 생성해서 각 단계별로 역할을 나눠 맡되, 사람의 최종 승인이 필요한 지점(요구사항 확정, 자동화 대상 선정, 코드 저장, 코드 업로드)에서는 반드시 사람 승인을 받아야만 다음 단계로 넘어가도록 강제했습니다(CLAUDE.md)
 
+4.Github Aaction으로 매일 정해진 시간에 테스트를 실행해 테스트 실패 여부를 Slack 및 Google sheet로 확인 가능 - 기본 기능에 대한 지속적인 품질 체크가 가능합니다. 또 모든 단계의 산출물을 Google doc와 sheet로 자동으로 작성해, 신규 업데이트 시 이력 관리 와 유지보수가 가능하게했습니다.  
+
+5.CI의 마지막 단계에 pip-audit 의존성 보안 점검을 통해 민감한 보안 정보 체크와 토큰 절약을 위한 불필요한 CI 실행 제거, AI 에이전트의 CI 모니터링 폴링을 진행했습니다.[ci-token-efficiency.md](./docs/troubleshooting/ci-token-efficiency.md)
+
 ## 실행 결과
-자동화 정의
+**테스트 자동화 CI/CD 정의** 
+CI : 테스트 스크립트 문법 검사 & 테스트 자체의 정상 작동 여부 검증
+CD : 최신 테스트 스크립트 실행 + Google Sheets / Slack 등으로 최종 테스트 결과 데이터 자동 전달
+
 
 실제 로그인/로그아웃 기능(TC-LOGIN-LOGOUT) 자동화 스위트를 실행한 결과입니다(스크린샷이 아닌 실제 실행 로그 발췌).
 
@@ -101,7 +108,7 @@ flowchart LR
 ✅ 표시는 **사람의 명시적 승인이 있어야만** 다음 단계로 진행되는 지점입니다. 이 게이트를
 Sub Agent 5종의 역할 분리와 함께 어떻게 설계했는지는 [AI 에이전트 설계 문서](./docs/AI_AGENTS.md)에서 자세히 다룹니다.
 
-## 🏗️ 자동화 아키텍처 (Page Object Model)
+## 자동화 아키텍처 (Page Object Model)
 
 ```mermaid
 flowchart TD
@@ -135,7 +142,7 @@ flowchart TD
 | [ad-overlay.md](./docs/troubleshooting/ad-overlay.md) | 제3자 광고 오버레이의 클릭 가로채임 대응 — 잘못된 최적화가 오히려 회귀를 유발했던 경험 포함 |
 | [flaky-tests.md](./docs/troubleshooting/flaky-tests.md) | headless 전용 결함, CI 조건식 논리 오류, "알려진 결함"과 "새로운 결함" 구분 원칙 |
 | [ci-secrets-setup.md](./docs/troubleshooting/ci-secrets-setup.md) | 저장소 이전 후 CI 반복 실패 진단기 — 관리자 인증 없이 간접 신호만으로 원인을 좁혀 GitHub Secrets 설정 실수(Name/Value 혼동)를 찾아낸 과정 |
-| [ci-token-efficiency.md](./docs/troubleshooting/ci-token-efficiency.md) | 🪙 토큰 절약을 위한 아이디어와 구현 — `paths-ignore`/`concurrency`로 불필요한 CI 실행 제거, AI 에이전트의 CI 모니터링 폴링 전략 개선 |
+| [ci-token-efficiency.md](./docs/troubleshooting/ci-token-efficiency.md) | 토큰 절약을 위한 아이디어와 구현 — `paths-ignore`/`concurrency`로 불필요한 CI 실행 제거, AI 에이전트의 CI 모니터링 폴링 전략 개선 |
 
 ## 의존성 보안 점검
 
@@ -177,7 +184,7 @@ Sheets에 각각 반영되어, 팀원이 저장소를 열지 않고도 최신 �
 | 페이지별 UI | 21 | ✅ 전건 자동화 |
 | **합계** | **76** | **79개 pytest 케이스**(일부 TC는 파라미터화로 확장 실행) |
 
-## 🚀 실행 방법
+## 실행 방법
 
 ```bash
 cd automation
@@ -210,9 +217,9 @@ qa-automation-portfolio/
 │   ├── tc/                         # Test Case + 자동화 대상 선정 결과
 │   ├── roadmap/ROADMAP.md          # 자동화 개발 Roadmap 및 진행 현황
 │   ├── automation/AUTOMATION_GUIDE.md  # 자동화 코드 개발 기준
-│   ├── defects/                    # 🐛 발견한 결함 정식 리포트
-│   ├── troubleshooting/            # 🔧 실전 문제 해결 사례
-│   └── AI_AGENTS.md                # 🤖 AI 에이전트 역할 분리·승인 게이트 설계
+│   ├── defects/                    # 발견한 결함 정식 리포트
+│   ├── troubleshooting/            # 실전 문제 해결 사례
+│   └── AI_AGENTS.md                # AI 에이전트 역할 분리·승인 게이트 설계
 ├── automation/                     # Selenium + pytest 자동화 코드 (POM)
 │   ├── pages/                      # Page Object (화면별 1클래스, BasePage 상속)
 │   ├── tests/                      # pytest 테스트 (Assertion 전담)
@@ -222,7 +229,7 @@ qa-automation-portfolio/
 │   ├── notify_slack/                # CI 실패 시 Slack Webhook 알림
 │   ├── sheets_sync/                 # TC/자동화 대상 선정 ↔ Google Sheets 연동
 │   ├── docs_sync/                   # PRD/Roadmap → Google Docs 연동
-│   └── security_check/              # 🔒 pip-audit 의존성 보안 점검 (로컬+CI)
+│   └── security_check/              # pip-audit 의존성 보안 점검 (로컬+CI)
 ├── .github/workflows/ci.yml        # GitHub Actions CI
 ├── .claude/agents/, .claude/skills/ # Sub Agent / Skill 정의
 └── CLAUDE.md                       # 프로젝트 최상위 지침 (Source of Truth)
