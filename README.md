@@ -11,7 +11,6 @@
 ![Selenium](https://img.shields.io/badge/selenium-4.x-43B02A)
 ![pytest](https://img.shields.io/badge/pytest-passing-0A9EDC)
 ![Tests](https://img.shields.io/badge/automated_TCs-76-informational)
-[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](./LICENSE)
 
 [이슈 리포트](./docs/defects/README.md) · [트러블슈팅](./docs/troubleshooting/) · [AI 에이전트 설계](./docs/AI_AGENTS.md)
 
@@ -259,7 +258,5 @@ qa-automation-portfolio/
 | 보안 점검 | pip-audit (의존성 취약점, 로컬+CI) |
 | 알림 | Slack (CI 결과 알림 전용) |
 | 협업 도구 | Google Sheets (TC/자동화 대상 관리), Google Docs (PRD/Roadmap 공유), Claude Code Sub Agent |
-
-## License
 
 [MIT](./LICENSE)
