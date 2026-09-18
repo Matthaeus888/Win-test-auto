@@ -29,7 +29,8 @@
 
 3.요구사항 작성, TC 작성, 자동화 선별, 계획, 자동화 작성 AI agent를 생성해서 각 단계별로 역할을 나눠 맡되, 사람의 최종 승인이 필요한 지점(요구사항 확정, 자동화 대상 선정, 코드 저장, 코드 업로드)에서는 반드시 사람 승인을 받아야만 다음 단계로 넘어가도록 강제했습니다(CLAUDE.md)
 
-## 실행 결과 예시
+## 실행 결과
+자동화 정의
 
 실제 로그인/로그아웃 기능(TC-LOGIN-LOGOUT) 자동화 스위트를 실행한 결과입니다(스크린샷이 아닌 실제 실행 로그 발췌).
 
@@ -60,7 +61,7 @@ tests/test_login.py::test_logout_via_direct_url PASSED
 <img width="888" height="736" alt="스크린샷 2026-09-16 150953" src="https://github.com/user-attachments/assets/defa9f04-4fd6-4f37-aa7f-b6da031c8ed6" />
 
 [테스트 완료 - CD 산출물(이슈 리포트)
-
+<img width="1046" height="185" alt="스크린샷 2026-09-18 160213" src="https://github.com/user-attachments/assets/2a409746-1645-4991-a3ae-ed3a517cc63d" />
 
 ## 이 프로젝트로 증명하는 역량
 
